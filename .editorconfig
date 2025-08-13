@@ -1,0 +1,37 @@
+# EditorConfig設定ファイル
+# プロジェクト全体で一貫したコーディングスタイルを保つ
+
+# プロジェクトルートを示す（上位の設定ファイルを無視）
+root = true
+
+# 全てのファイルに適用される基本設定
+[*]
+# 文字エンコーディング（UTF-8推奨）
+charset = utf-8
+# 改行コード（lf: Unix/Linux/Mac, crlf: Windows）
+end_of_line = lf
+# ファイル末尾に改行を追加
+insert_final_newline = true
+# 行末の空白文字を削除
+trim_trailing_whitespace = true
+# インデントスタイル（space: スペース, tab: タブ）
+indent_style = space
+# インデントサイズ（スペースの数）
+indent_size = 4
+
+# JavaScript/TypeScript/CSS等のフロントエンドファイル
+[*.{js,jsx,ts,tsx,css,scss,json,yml,yaml}]
+# インデントは4スペース
+# 命名規則: クラス名(パスカルケース)、関数・変数名(キャメルケース)、定数名(大文字スネークケース)
+indent_size = 4
+
+# PHPファイル（Laravelアプリケーション）
+[*.{php,blade.php}]
+# インデントは4スペース
+# 命名規則: クラス名(パスカルケース)、メソッド・変数名(キャメルケース)、定数名(大文字スネークケース)
+indent_size = 4
+
+# Markdownファイル
+[*.md]
+# 行末の空白を保持（Markdownの構文に必要）
+trim_trailing_whitespace = false

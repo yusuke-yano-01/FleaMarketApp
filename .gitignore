@@ -1,0 +1,57 @@
+# Laravel
+/vendor/
+/node_modules/
+/public/hot
+/public/storage
+/storage/*.key
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/app/public/*
+/bootstrap/cache/*
+.env
+.env.backup
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+
+# Docker
+docker/mysql/data/
+docker/mysql/data/**
+docker/nginx/logs/
+docker/php/logs/
+docker/**/logs/
+docker/**/data/
+docker/mysql/data/performance_schema/
+docker/mysql/data/#ib_*
+docker/mysql/data/*.dblwr
+docker/mysql/data/*.ibd
+docker/mysql/data/*.pem
+docker/mysql/data/binlog.*
+docker/mysql/data/undo_*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Cache
+cache/
+*.cache
+
+# Temporary files
+tmp/
+temp/
