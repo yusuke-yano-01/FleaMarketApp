@@ -1,0 +1,473 @@
+/* 商品一覧ページ専用スタイル */
+
+/* レイアウト: 中央表示 */
+.productlist__content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.productlist__heading {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.productlist__heading h2 {
+    font-size: 28px;
+    color: #333;
+    margin: 0;
+}
+
+/* 検索フォーム */
+.form {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    display: flex;
+    gap: 15px;
+    align-items: end;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.form__group {
+    flex: 1;
+    min-width: 250px;
+    max-width: 400px;
+}
+
+.form__group-content {
+    width: 100%;
+}
+
+.form__input--text input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.form__input--text input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.form__button {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.form__button-submit {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.form__button-submit:hover {
+    background-color: #0056b3;
+}
+
+.form__button-reset {
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.form__button-reset:hover {
+    background-color: #545b62;
+}
+
+/* タブシステム */
+.tabs {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.tab-menu {
+    display: inline-flex;
+    border-bottom: 2px solid #ddd;
+    background: white;
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tab-link {
+    padding: 16px 32px;
+    text-decoration: none;
+    color: #666;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    background: white;
+    transition: all 0.3s;
+    font-weight: 500;
+    font-size: 16px;
+    border-right: 1px solid #eee;
+}
+
+.tab-link:last-child {
+    border-right: none;
+}
+
+.tab-link:hover {
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.tab-link.active {
+    color: #007bff;
+    border-bottom-color: #007bff;
+    background-color: #fff;
+    font-weight: bold;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* 商品グリッド（flexbox） */
+.product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+    margin-bottom: 30px;
+}
+
+.product-item {
+    flex: 0 0 200px;
+    width: 200px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.product-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease;
+}
+
+.product-link:hover {
+    transform: scale(1.02);
+}
+
+.product-image {
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    background: #f8f9fa;
+    cursor: pointer;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-item:hover .product-image img {
+    transform: scale(1.05);
+}
+
+.product-name {
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    line-height: 1.4;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-actions {
+    padding: 0 12px 12px;
+    text-align: center;
+}
+
+/* マイリストボタン */
+.mylist-btn {
+    padding: 6px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+    min-width: 60px;
+}
+
+.mylist-btn:hover {
+    background-color: #0056b3;
+}
+
+.mylist-btn.in-mylist {
+    background-color: #dc3545;
+}
+
+.mylist-btn.in-mylist:hover {
+    background-color: #c82333;
+}
+
+/* ページネーション */
+.pagination {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+    gap: 20px;
+}
+
+.pagination nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+/* Previous/Nextボタンのスタイル */
+.pagination .flex.items-center.justify-between {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.pagination .flex.items-center.justify-between .flex-1 {
+    flex: none;
+}
+
+/* ページ番号ボタンのスタイル */
+.pagination a,
+.pagination span {
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    color: #007bff;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s;
+    font-size: 14px;
+    min-width: 32px;
+    text-align: center;
+}
+
+/* ページ番号の左右の余白を強制的に均等に */
+.pagination .flex.items-center.justify-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.pagination .flex.items-center.justify-center > * {
+    flex: 0 0 auto;
+    text-align: center;
+}
+
+/* 特定のページ番号の余白を調整 */
+.pagination .flex.items-center.justify-center a[href*="page=1"],
+.pagination .flex.items-center.justify-center a[href*="page=2"],
+.pagination .flex.items-center.justify-center span.current {
+    margin: 0 2px;
+}
+
+/* 矢印ボタンの余白も調整 */
+.pagination
+    .flex.items-center.justify-center
+    a[href*="page="]:not([href*="page=1"]):not([href*="page=2"]) {
+    margin: 0 2px;
+}
+
+/* Showing結果のスタイル */
+.pagination .text-sm.text-gray-700 {
+    text-align: center;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 400px;
+}
+
+.pagination a:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.pagination .current {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* ページネーションの矢印を小さく */
+.pagination svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ページネーションのテキストを調整 */
+.pagination .sr-only {
+    display: none;
+}
+
+/* 検索結果 */
+.search-results {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.search-results h3 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+/* 空のマイリスト */
+.empty-mylist {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+}
+
+.empty-mylist p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 1200px) {
+    .product-item {
+        flex: 0 0 180px;
+        width: 180px;
+    }
+}
+
+@media (max-width: 900px) {
+    .product-item {
+        flex: 0 0 160px;
+        width: 160px;
+    }
+}
+
+@media (max-width: 600px) {
+    .product-item {
+        flex: 0 0 140px;
+        width: 140px;
+    }
+
+    .product-grid {
+        gap: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .productlist__content {
+        padding: 15px;
+    }
+
+    .form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .form__group {
+        min-width: auto;
+        max-width: none;
+    }
+
+    .form__button {
+        justify-content: center;
+    }
+
+    .tab-menu {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .tab-link {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+    }
+
+    .tab-link:last-child {
+        border-bottom: none;
+    }
+
+    .productlist__table {
+        font-size: 14px;
+    }
+
+    .productlist__table-header,
+    .productlist__table-item {
+        padding: 8px 6px;
+    }
+
+    /* テーブルの横スクロール */
+    .productlist__table {
+        overflow-x: auto;
+    }
+
+    .productlist__table-inner {
+        min-width: 600px;
+    }
+}
+
+@media (max-width: 480px) {
+    .productlist__heading h2 {
+        font-size: 24px;
+    }
+
+    .productlist__table-inner {
+        min-width: 500px;
+    }
+
+    .mylist-btn {
+        padding: 4px 8px;
+        font-size: 12px;
+        min-width: 50px;
+    }
+}

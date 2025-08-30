@@ -15,8 +15,7 @@ class UserProductTypeFactory extends Factory
     {
         $types = [
             '購入商品',
-            '販売商品',
-            'おすすめ商品'
+            '販売商品'
         ];
         
         return [
