@@ -17,12 +17,13 @@ class Product extends Model
     protected $fillable = [
         'productcategory_id',
         'productstate_id',
-        'productbrand_id',
+        'brand',
         'name',
         'detail',
         'value',
         'image',
         'soldflg',
+        'favoriteflg',
     ];
 
     /**
@@ -33,6 +34,7 @@ class Product extends Model
     protected $casts = [
         'value' => 'decimal:2',
         'soldflg' => 'boolean',
+        'favoriteflg' => 'boolean',
     ];
 
     /**
@@ -49,14 +51,6 @@ class Product extends Model
     public function state()
     {
         return $this->belongsTo(ProductState::class, 'productstate_id');
-    }
-
-    /**
-     * Get the brand that owns the product.
-     */
-    public function brand()
-    {
-        return $this->belongsTo(ProductBrand::class, 'productbrand_id');
     }
 
     /**

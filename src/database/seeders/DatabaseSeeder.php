@@ -14,5 +14,15 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
+        
+        // マスターデータの投入
+        $this->call([
+            UsersSeeder::class,              // ユーザー（最初に実行）
+            ProductCategoriesSeeder::class,  // 商品カテゴリー
+            ProductStatesSeeder::class,      // 商品状態
+            UserProductTypesSeeder::class,   // ユーザー商品タイプ
+            ProductsSeeder::class,           // 商品（UserProductRelationsSeederの前に実行）
+            UserProductRelationsSeeder::class,   // ユーザー商品関係（最後に実行）
+        ]);
     }
 }

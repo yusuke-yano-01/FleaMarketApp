@@ -1,0 +1,211 @@
+/* 商品詳細ページのスタイル */
+.productdetail__content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.productdetail__header {
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 20px;
+}
+
+.back-link {
+    display: inline-block;
+    color: #666;
+    text-decoration: none;
+    margin-bottom: 15px;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.back-link:hover {
+    color: #333;
+}
+
+.productdetail__header h1 {
+    font-size: 28px;
+    color: #333;
+    margin: 0;
+}
+
+.productdetail__main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.productdetail__image {
+    text-align: center;
+}
+
+.productdetail__image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.productdetail__info {
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.productdetail__name {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.brand-name {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: bold;
+    color: #666;
+    min-width: 80px;
+}
+
+.detail-value {
+    color: #333;
+    text-align: left;
+}
+
+.detail-value.price {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.tax-included {
+    font-size: 14px;
+    color: #666;
+    font-weight: normal;
+    vertical-align: bottom;
+}
+
+.section-title {
+    font-size: 18px;
+    color: #333;
+    margin: 30px 0 15px 0;
+    font-weight: bold;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 8px;
+}
+
+.productdetail__description {
+    margin-bottom: 20px;
+}
+
+.productdetail__description p {
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.productdetail__actions {
+    margin: 25px 0;
+    text-align: center;
+}
+
+.purchase-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+.purchase-btn:hover {
+    background: #c0392b;
+}
+
+.comment-form {
+    margin-top: 20px;
+}
+
+.comment-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+    margin-bottom: 15px;
+}
+
+.comment-textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+.comment-submit-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+.comment-submit-btn:hover {
+    background: #c0392b;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .productdetail__main {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .productdetail__content {
+        padding: 15px;
+    }
+
+    .productdetail__header h1 {
+        font-size: 24px;
+    }
+
+    .productdetail__name {
+        font-size: 20px;
+    }
+
+    .purchase-btn {
+        padding: 12px 30px;
+        font-size: 16px;
+    }
+}

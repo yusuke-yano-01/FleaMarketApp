@@ -1,0 +1,345 @@
+/* ========================================
+   マイページ専用スタイル
+   ======================================== */
+
+/* マイページコンテナ */
+.mypage-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ユーザープロフィールヘッダー */
+.user-profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    margin-bottom: 40px;
+    padding: 30px;
+    background-color: #f8f9fa;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-main-info {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-left: 50px;
+}
+
+.user-avatar {
+    flex-shrink: 0;
+}
+
+.avatar-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #9e743e;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-image: url("/images/default_user_icon.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* 画像読み込み失敗時のフォールバック */
+.avatar-image:not([src]) {
+    background-image: url("/images/default_user_icon.png");
+}
+
+.avatar-image[src=""] {
+    background-image: url("/images/default_user_icon.png");
+}
+
+.user-profile-info {
+    flex: 1;
+}
+
+.user-name {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.user-actions {
+    position: absolute;
+    top: 50%;
+    right: 30px;
+    transform: translateY(-50%);
+}
+
+.edit-profile-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #9e743e;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 2px solid #9e743e;
+    font-size: 14px;
+}
+
+.edit-profile-btn:hover {
+    background-color: #ffffff;
+    color: #9e743e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 商品タブ */
+.product-tabs {
+    margin-top: 30px;
+}
+
+.tab-nav {
+    display: flex;
+    border-bottom: 2px solid #e9ecef;
+    margin-bottom: 30px;
+}
+
+.tab-btn {
+    padding: 15px 30px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.tab-btn.active {
+    color: #9e743e;
+    border-bottom-color: #9e743e;
+    font-weight: 600;
+}
+
+.tab-btn:hover {
+    color: #9e743e;
+    background-color: #f8f9fa;
+}
+
+/* タブコンテンツ */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* 商品グリッド */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.product-item {
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e9ecef;
+}
+
+.product-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.product-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    background-color: #f8f9fa;
+    background-image: url("/images/no-image.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* 商品画像読み込み失敗時のフォールバック */
+.product-image:not([src]) {
+    background-image: url("/images/no-image.png");
+}
+
+.product-image[src=""] {
+    background-image: url("/images/no-image.png");
+}
+
+.product-name {
+    padding: 15px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    text-align: center;
+    line-height: 1.4;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 商品がない場合 */
+.no-products {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+    font-size: 16px;
+    font-style: italic;
+    grid-column: 1 / -1;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .mypage-container {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .user-profile-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 60px 20px 20px;
+        gap: 20px;
+        position: relative;
+    }
+
+    .user-main-info {
+        flex-direction: column;
+        gap: 15px;
+        margin-left: 0;
+    }
+
+    .user-name {
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .avatar-image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .user-actions {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        transform: none;
+    }
+
+    .edit-profile-btn {
+        padding: 8px 16px;
+        font-size: 12px;
+        min-width: auto;
+    }
+
+    .tab-nav {
+        justify-content: center;
+    }
+
+    .tab-btn {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+    }
+
+    .product-image {
+        height: 120px;
+        background-image: url("/images/no-image.png");
+    }
+
+    .product-name {
+        padding: 10px;
+        font-size: 13px;
+        min-height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mypage-container {
+        margin: 5px;
+        padding: 10px;
+    }
+
+    .user-profile-header {
+        padding: 50px 15px 15px;
+        gap: 15px;
+    }
+
+    .user-main-info {
+        gap: 12px;
+        margin-left: 0;
+    }
+
+    .user-name {
+        font-size: 20px;
+    }
+
+    .avatar-image {
+        width: 70px;
+        height: 70px;
+    }
+
+    .user-actions {
+        top: 15px;
+        right: 15px;
+        transform: none;
+    }
+
+    .edit-profile-btn {
+        padding: 6px 12px;
+        font-size: 11px;
+        border-radius: 15px;
+    }
+
+    .tab-nav {
+        flex-direction: column;
+    }
+
+    .tab-btn {
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid #e9ecef;
+        border-radius: 0;
+    }
+
+    .tab-btn.active {
+        border-bottom-color: #9e743e;
+        background-color: #f8f9fa;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .product-image {
+        height: 100px;
+        background-image: url("/images/no-image.png");
+    }
+
+    .product-name {
+        padding: 8px;
+        font-size: 12px;
+        min-height: 35px;
+    }
+}

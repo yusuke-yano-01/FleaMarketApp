@@ -12,23 +12,29 @@
   @yield('css')
 </head>
 
-<body style="background-color: rgb(255, 236, 211);">
+<body style="background-color: rgb(255, 236, 211); margin: 0; padding: 0;">
   <header class="header">
     <div class="header__inner">
       <div class="header-utilities">
         <a class="header__logo" href="/">
-          FashionablyLate
+          <img src="{{ asset('assets/images/logo.svg') }}" alt="フリマアプリ" class="header__logo-image">
         </a>
         <nav class="header-nav">
             @if (Auth::check())
-              <form action="/auth/logout" method="post">
-                @csrf
-                <button class="header-nav__link">ログアウト</button>
-              </form>
+              <div class="header-nav__user">
+                <a class="header-nav__link" href="/mypage">マイページ</a>
+                <form action="/auth/logout" method="post" class="header-nav__logout">
+                  @csrf
+                  <button class="header-nav__link header-nav__logout-btn">ログアウト</button>
+                </form>
+              </div>
             @elseif (request()->path() === 'auth/login')
               <a class="header-nav__link" href="/auth/register">register</a>
             @elseif (request()->path() === 'auth/register')
               <a class="header-nav__link" href="/auth/login">login</a>
+            @else
+              <a class="header-nav__link" href="/auth/login">login</a>
+              <a class="header-nav__link" href="/auth/register">register</a>
             @endif
         </nav>
       </div>
