@@ -35,7 +35,11 @@
             
             <!-- 購入手続きボタン -->
             <div class="productdetail__actions">
-                <button class="purchase-btn">購入手続きへ</button>
+                @auth
+                    <a href="{{ route('purchase.show', $product->id) }}" class="purchase-btn">購入手続きへ</a>
+                @else
+                    <a href="{{ url('/auth/login') }}" class="purchase-btn">購入手続きへ</a>
+                @endauth
             </div>
             
             <!-- 商品説明タイトル（太文字） -->
@@ -64,12 +68,130 @@
             <!-- 商品へのコメントタイトル -->
             <h3 class="section-title">商品へのコメント</h3>
             
-            <!-- コメントフォーム -->
-            <div class="comment-form">
-                <textarea class="comment-textarea" ></textarea>
-                <button class="comment-submit-btn">コメントを送信する</button>
+            <!-- コメント一覧 -->
+            <div class="comments-section">
+                <h3>コメント一覧</h3>
+                <div id="comments-list">
+                    @if($product->comments->count() > 0)
+                        @foreach($product->comments->sortByDesc('created_at')->take(3) as $comment)
+                            <div class="comment-item">
+                                <div class="comment-header">
+                                    <span class="comment-author">{{ $comment->userProductRelation->user->name }}</span>
+                                    <span class="comment-date">{{ $comment->created_at->setTimezone('Asia/Tokyo')->format('Y/m/d H:i') }}</span>
+                                </div>
+                                <div class="comment-content">{{ $comment->comment }}</div>
+                            </div>
+                        @endforeach
+                        
+                        @if($product->comments->count() > 3)
+                            <div id="hidden-comments" style="display: none;">
+                                @foreach($product->comments->sortByDesc('created_at')->skip(3) as $comment)
+                                    <div class="comment-item">
+                                        <div class="comment-header">
+                                            <span class="comment-author">{{ $comment->userProductRelation->user->name }}</span>
+                                            <span class="comment-date">{{ $comment->created_at->setTimezone('Asia/Tokyo')->format('Y/m/d H:i') }}</span>
+                                        </div>
+                                        <div class="comment-content">{{ $comment->comment }}</div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <button id="show-more-comments" class="show-more-btn">さらに表示する（{{ $product->comments->count() - 3 }}件）</button>
+                        @endif
+                    @else
+                        <p class="no-comments">まだコメントはありません。</p>
+                    @endif
+                </div>
             </div>
+
+            <!-- コメントフォーム -->
+            @auth
+            <div class="comment-form">
+                <h3>コメントを投稿</h3>
+                <form id="comment-form">
+                    @csrf
+                    <textarea class="comment-textarea" name="comment" placeholder="コメントを入力してください（500文字以内）" maxlength="500" required></textarea>
+                    <button type="submit" class="comment-submit-btn">コメントを送信する</button>
+                </form>
+            </div>
+            @else
+            <div class="comment-login-prompt">
+                <p>コメントを投稿するには<a href="{{ url('/auth/login') }}">ログイン</a>してください。</p>
+            </div>
+            @endauth
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // コメント投稿フォーム
+    const commentForm = document.getElementById('comment-form');
+    if (commentForm) {
+        commentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const comment = formData.get('comment').trim();
+            
+            if (!comment) {
+                alert('コメントを入力してください。');
+                return;
+            }
+            
+            fetch('{{ route("product.comment", $product->id) }}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 新しいコメントを追加
+                    addCommentToPage(data.comment);
+                    this.reset();
+                } else {
+                    alert('コメントの投稿に失敗しました。');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('エラーが発生しました。');
+            });
+        });
+    }
+    
+    // さらに表示するボタン
+    const showMoreBtn = document.getElementById('show-more-comments');
+    if (showMoreBtn) {
+        showMoreBtn.addEventListener('click', function() {
+            document.getElementById('hidden-comments').style.display = 'block';
+            this.style.display = 'none';
+        });
+    }
+});
+
+function addCommentToPage(comment) {
+    const commentsList = document.getElementById('comments-list');
+    const noComments = commentsList.querySelector('.no-comments');
+    
+    if (noComments) {
+        noComments.remove();
+    }
+    
+    const commentElement = document.createElement('div');
+    commentElement.className = 'comment-item';
+    commentElement.innerHTML = `
+        <div class="comment-header">
+            <span class="comment-author">${comment.user_product_relation.user.name}</span>
+            <span class="comment-date">${new Date(comment.created_at).toLocaleString('ja-JP', {timeZone: 'Asia/Tokyo'})}</span>
+        </div>
+        <div class="comment-content">${comment.comment}</div>
+    `;
+    
+    // 新しいコメントを一番上に追加
+    commentsList.insertBefore(commentElement, commentsList.firstChild);
+}
+</script>
 @endsection

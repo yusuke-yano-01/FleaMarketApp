@@ -10,6 +10,7 @@ use App\Models\ProductCategory;
 use App\Models\ProductState;
 use App\Models\UserProductRelation;
 use App\Models\UserProductType;
+use App\Models\Comment;
 
 class ProductListController extends Controller
 {
@@ -30,7 +31,8 @@ class ProductListController extends Controller
 
     public function search(Request $request)
     {
-        $query = Product::with(['category', 'state']);
+        $query = Product::with(['category', 'state'])
+            ->where('soldflg', false); // 売却済み商品を除外
         
         // 商品名で検索（商品名のみ）
         if ($request->filled('name')) {
@@ -52,7 +54,7 @@ class ProductListController extends Controller
      */
     public function show($id)
     {
-        $product = Product::with(['category', 'state'])->findOrFail($id);
+        $product = Product::with(['category', 'state', 'comments.userProductRelation.user'])->findOrFail($id);
         
         return view('productslist.productdetail', compact('product'));
     }
@@ -62,8 +64,9 @@ class ProductListController extends Controller
      */
     private function getRecommendedProducts()
     {
-        // 最新の商品をおすすめとして表示
+        // 最新の商品をおすすめとして表示（売却済み商品を除外）
         return Product::with(['category', 'state'])
+            ->where('soldflg', false)
             ->orderBy('created_at', 'desc')
             ->paginate(12);
     }
@@ -106,6 +109,7 @@ class ProductListController extends Controller
         
         return Product::with(['category', 'state'])
             ->whereIn('id', $productIds)
+            ->where('soldflg', false) // 売却済み商品を除外
             ->paginate(12);
     }
     
@@ -176,5 +180,46 @@ class ProductListController extends Controller
         } else {
             return response()->json(['message' => 'マイリストに該当商品が見つかりません。'], 404);
         }
+    }
+
+    /**
+     * コメントを投稿
+     */
+    public function addComment(Request $request, $id)
+    {
+        $request->validate([
+            'comment' => 'required|string|max:500',
+        ], [
+            'comment.required' => 'コメントを入力してください。',
+            'comment.max' => 'コメントは500文字以内で入力してください。',
+        ]);
+
+        $product = Product::findOrFail($id);
+        
+        // マイリストタイプを取得（コメント用）
+        $commentType = UserProductType::where('name', 'コメント')->first();
+        if (!$commentType) {
+            $commentType = UserProductType::create(['name' => 'コメント']);
+        }
+        
+        // UserProductRelationを作成または取得
+        $userProductRelation = UserProductRelation::firstOrCreate([
+            'product_id' => $product->id,
+            'user_id' => Auth::id(),
+            'userproducttype_id' => $commentType->id,
+        ]);
+        
+        $comment = Comment::create([
+            'userproductrelation_id' => $userProductRelation->id,
+            'comment' => $request->comment,
+        ]);
+
+        $comment->load('userProductRelation.user');
+
+        return response()->json([
+            'success' => true,
+            'comment' => $comment,
+            'message' => 'コメントを投稿しました。'
+        ]);
     }
 }

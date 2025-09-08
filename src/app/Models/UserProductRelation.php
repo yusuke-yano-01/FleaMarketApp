@@ -43,4 +43,12 @@ class UserProductRelation extends Model
     {
         return $this->belongsTo(UserProductType::class, 'userproducttype_id');
     }
+
+    /**
+     * Get the comments for the user product relation.
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

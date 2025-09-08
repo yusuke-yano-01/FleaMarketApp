@@ -60,4 +60,12 @@ class Product extends Model
     {
         return $this->hasMany(UserProductRelation::class);
     }
+
+    /**
+     * Get the comments for the product through user product relations.
+     */
+    public function comments()
+    {
+        return $this->hasManyThrough(Comment::class, UserProductRelation::class, 'product_id', 'userproductrelation_id');
+    }
 }

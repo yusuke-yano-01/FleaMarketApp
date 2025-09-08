@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductListController;
 use App\Http\Controllers\MyPageController;
+use App\Http\Controllers\PurchaseController;
 use Laravel\Fortify\Fortify;
 
 
@@ -29,6 +30,7 @@ Route::group(['prefix' => 'productlist'], function() {
     Route::get('search', [ProductListController::class, 'search']);
     Route::post('search', [ProductListController::class, 'search']);
     Route::get('product/{id}', [ProductListController::class, 'show'])->name('productlist.product'); // 商品詳細ページ
+    Route::post('product/{id}/comment', [ProductListController::class, 'addComment'])->name('product.comment');
 });
 
 // 認証関連のルート
@@ -49,5 +51,12 @@ Route::middleware('auth')->group(function () {
     // マイページ
     Route::get('mypage', [MyPageController::class, 'index']);
     Route::get('mypage/profile/edit', [MyPageController::class, 'editProfile']);
+    
+    // 購入関連のルート
+    Route::get('purchase/{id}', [PurchaseController::class, 'show'])->name('purchase.show');
+    Route::post('purchase/{id}', [PurchaseController::class, 'purchase'])->name('purchase.process');
+    Route::get('purchase/{id}/complete', [PurchaseController::class, 'complete'])->name('purchase.complete');
+    Route::get('purchase/{id}/address/edit', [PurchaseController::class, 'editAddress'])->name('purchase.address.edit');
+    Route::post('purchase/{id}/address/update', [PurchaseController::class, 'updateAddress'])->name('purchase.address.update');
 });
 
