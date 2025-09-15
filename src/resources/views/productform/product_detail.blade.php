@@ -157,13 +157,13 @@
         const description = document.querySelector('textarea[name="description"]').value;
         const price = document.querySelector('input[name="price"]').value;
         const categoryId = document.querySelector('input[name="category_id"]:checked');
-        const stateId = document.querySelector('input[name="state_id"]:checked');
+        const stateId = document.querySelector('select[name="state_id"]').value;
         const image = document.querySelector('input[name="image"]').files[0];
         
         console.log('フォームデータ:', {
             name, brand, description, price,
             categoryId: categoryId ? categoryId.value : null,
-            stateId: stateId ? stateId.value : null,
+            stateId: stateId,
             image: image ? image.name : null
         });
         
