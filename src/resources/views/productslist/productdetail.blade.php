@@ -33,6 +33,29 @@
                 <span class="detail-value price">¥{{ number_format($product->value) }} <span class="tax-included">(税込)</span></span>
             </div>
             
+            <!-- お気に入り・コメント情報 -->
+            <div class="product-stats">
+                <div class="stats-item">
+                    @auth
+                        <button class="mylist-btn" data-product-id="{{ $product->id }}">
+                            <span class="star-icon">☆</span>
+                            <span class="mylist-count">{{ $product->mylistCount ?? 0 }}</span>
+                        </button>
+                    @else
+                        <a href="{{ url('/auth/login') }}" class="mylist-btn">
+                            <span class="star-icon">☆</span>
+                            <span class="mylist-count">{{ $product->mylistCount ?? 0 }}</span>
+                        </a>
+                    @endauth
+                </div>
+                <div class="stats-item">
+                    <div class="comment-stats">
+                        <span class="comment-icon">💬</span>
+                        <span class="comment-count">{{ $product->comments->count() }}</span>
+                    </div>
+                </div>
+            </div>
+            
             <!-- 購入手続きボタン -->
             <div class="productdetail__actions">
                 @auth
@@ -76,7 +99,7 @@
                         @foreach($product->comments->sortByDesc('created_at')->take(3) as $comment)
                             <div class="comment-item">
                                 <div class="comment-header">
-                                    <span class="comment-author">{{ $comment->userProductRelation->user->name }}</span>
+                                    <span class="comment-author">{{ $comment->user->name }}</span>
                                     <span class="comment-date">{{ $comment->created_at->setTimezone('Asia/Tokyo')->format('Y/m/d H:i') }}</span>
                                 </div>
                                 <div class="comment-content">{{ $comment->comment }}</div>
@@ -88,7 +111,7 @@
                                 @foreach($product->comments->sortByDesc('created_at')->skip(3) as $comment)
                                     <div class="comment-item">
                                         <div class="comment-header">
-                                            <span class="comment-author">{{ $comment->userProductRelation->user->name }}</span>
+                                            <span class="comment-author">{{ $comment->user->name }}</span>
                                             <span class="comment-date">{{ $comment->created_at->setTimezone('Asia/Tokyo')->format('Y/m/d H:i') }}</span>
                                         </div>
                                         <div class="comment-content">{{ $comment->comment }}</div>
@@ -124,6 +147,59 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // マイリストボタン
+    const mylistBtn = document.querySelector('.mylist-btn');
+    if (mylistBtn && mylistBtn.tagName === 'BUTTON') {
+        mylistBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productId = this.getAttribute('data-product-id');
+            
+            fetch('/productlist/mylist/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    product_id: productId
+                })
+            })
+            .then(response => {
+                if (response.status === 401) {
+                    alert('ログインが必要です。');
+                    window.location.href = '/auth/login';
+                    return;
+                }
+                if (response.status === 302) {
+                    alert('プロフィール設定を完了してください。');
+                    window.location.href = '/profile/setup';
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data && data.message) {
+                    // マイリストカウントを更新
+                    const countElement = this.querySelector('.mylist-count');
+                    const currentCount = parseInt(countElement.textContent);
+                    countElement.textContent = currentCount + 1;
+                    
+                    // ボタンの状態を変更
+                    this.classList.add('in-mylist');
+                    this.innerHTML = '<span class="star-icon">★</span><span class="mylist-count">' + (currentCount + 1) + '</span>';
+                    
+                    alert('マイリストに追加しました。');
+                } else if (data && data.error) {
+                    alert(data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('エラーが発生しました。');
+            });
+        });
+    }
+    
     // コメント投稿フォーム
     const commentForm = document.getElementById('comment-form');
     if (commentForm) {
@@ -145,12 +221,29 @@ document.addEventListener('DOMContentLoaded', function() {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (response.status === 401) {
+                    alert('ログインが必要です。');
+                    window.location.href = '/auth/login';
+                    return;
+                }
+                if (response.status === 302) {
+                    alert('プロフィール設定を完了してください。');
+                    window.location.href = '/profile/setup';
+                    return;
+                }
+                return response.json();
+            })
             .then(data => {
-                if (data.success) {
+                if (data && data.success) {
                     // 新しいコメントを追加
                     addCommentToPage(data.comment);
                     this.reset();
+                    
+                    // コメントカウントを更新
+                    const commentCountElement = document.querySelector('.comment-count');
+                    const currentCount = parseInt(commentCountElement.textContent);
+                    commentCountElement.textContent = currentCount + 1;
                 } else {
                     alert('コメントの投稿に失敗しました。');
                 }
@@ -184,7 +277,7 @@ function addCommentToPage(comment) {
     commentElement.className = 'comment-item';
     commentElement.innerHTML = `
         <div class="comment-header">
-            <span class="comment-author">${comment.user_product_relation.user.name}</span>
+            <span class="comment-author">${comment.user.name}</span>
             <span class="comment-date">${new Date(comment.created_at).toLocaleString('ja-JP', {timeZone: 'Asia/Tokyo'})}</span>
         </div>
         <div class="comment-content">${comment.comment}</div>

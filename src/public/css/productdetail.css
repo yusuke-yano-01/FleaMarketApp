@@ -168,21 +168,94 @@
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
 }
 
-.comment-submit-btn {
-    background: #e74c3c;
-    color: white;
-    border: none;
-    padding: 15px 40px;
-    border-radius: 8px;
+/* お気に入り・コメント情報 */
+.product-stats {
+    display: flex;
+    justify-content: flex-start;
+    gap: 30px;
+    margin: 20px 0;
+    padding: 15px 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    background-color: white;
+}
+
+.stats-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mylist-btn {
+    background-color: white;
+    color: #333;
+    border: 2px solid #e74c3c;
+    padding: 10px 20px;
+    border-radius: 6px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s;
-    width: 100%;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.comment-submit-btn:hover {
-    background: #c0392b;
+.mylist-btn:hover {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.mylist-btn.in-mylist {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.mylist-btn.in-mylist:hover {
+    background-color: #c0392b;
+}
+
+.star-icon {
+    font-size: 18px;
+    color: #333;
+}
+
+.mylist-btn:hover .star-icon {
+    color: white;
+}
+
+.mylist-btn.in-mylist .star-icon {
+    color: white;
+}
+
+.mylist-btn[href] {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mylist-count {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.comment-stats {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #666;
+    font-size: 16px;
+    cursor: default;
+}
+
+.comment-icon {
+    font-size: 18px;
+}
+
+.comment-count {
+    font-size: 14px;
+    font-weight: bold;
 }
 
 /* 購入手続きボタン */
@@ -225,6 +298,21 @@
 
     .productdetail__name {
         font-size: 20px;
+    }
+
+    .product-stats {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .mylist-btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .comment-stats {
+        font-size: 14px;
     }
 }
 
@@ -270,18 +358,20 @@
 }
 
 .comment-submit-btn {
-    background-color: #007bff;
+    background-color: #e74c3c;
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-size: 14px;
+    padding: 15px 40px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s;
+    width: 100%;
 }
 
 .comment-submit-btn:hover {
-    background-color: #0056b3;
+    background-color: #c0392b;
 }
 
 .comment-login-prompt {

@@ -23,7 +23,6 @@ class Product extends Model
         'value',
         'image',
         'soldflg',
-        'favoriteflg',
     ];
 
     /**
@@ -34,7 +33,6 @@ class Product extends Model
     protected $casts = [
         'value' => 'decimal:2',
         'soldflg' => 'boolean',
-        'favoriteflg' => 'boolean',
     ];
 
     /**
@@ -62,10 +60,10 @@ class Product extends Model
     }
 
     /**
-     * Get the comments for the product through user product relations.
+     * Get the comments for the product.
      */
     public function comments()
     {
-        return $this->hasManyThrough(Comment::class, UserProductRelation::class, 'product_id', 'userproductrelation_id');
+        return $this->hasMany(Comment::class);
     }
 }

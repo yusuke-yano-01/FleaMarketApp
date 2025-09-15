@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductListController;
 use App\Http\Controllers\MyPageController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\ProductformController;
 use Laravel\Fortify\Fortify;
 
 
@@ -24,13 +25,12 @@ Route::get('/', function () {
     return redirect('/productlist');
 });
 
-// 商品一覧関連のルート（認証不要）
+// 商品一覧関連のルート
 Route::group(['prefix' => 'productlist'], function() {
-    Route::get('', [ProductListController::class, 'index']);
+    Route::get('', [ProductListController::class, 'index'])->name('productlist.index');
     Route::get('search', [ProductListController::class, 'search']);
     Route::post('search', [ProductListController::class, 'search']);
     Route::get('product/{id}', [ProductListController::class, 'show'])->name('productlist.product'); // 商品詳細ページ
-    Route::post('product/{id}/comment', [ProductListController::class, 'addComment'])->name('product.comment');
 });
 
 // 認証関連のルート
@@ -42,15 +42,31 @@ Route::group(['prefix' => 'auth'], function() {
     Route::post('logout', [AuthController::class, 'logout']);
 });
 
-// ログイン後のみアクセス可能なルート
+// プロフィール設定（住所チェックなし）
 Route::middleware('auth')->group(function () {
+    Route::get('profile/setup', [MyPageController::class, 'showProfileSetup'])->name('profile.setup');
+    Route::post('profile/setup', [MyPageController::class, 'storeProfile'])->name('profile.store');
+});
+
+// 認証済みユーザー向けのルート（住所チェックなし）
+Route::middleware('auth')->group(function () {
+    // コメント投稿
+    Route::post('productlist/product/{id}/comment', [ProductListController::class, 'addComment'])->name('product.comment');
+    
     // マイリスト機能
     Route::post('productlist/mylist/add', [ProductListController::class, 'addToMylist']);
     Route::post('productlist/mylist/remove', [ProductListController::class, 'removeFromMylist']);
-    
+});
+
+// ログイン後のみアクセス可能なルート（住所チェックあり）
+Route::middleware(['auth', 'profile.setup'])->group(function () {
     // マイページ
     Route::get('mypage', [MyPageController::class, 'index']);
     Route::get('mypage/profile/edit', [MyPageController::class, 'editProfile']);
+    
+    // 商品出品関連のルート
+    Route::get('productform', [ProductformController::class, 'create'])->name('productform.create');
+    Route::post('productform', [ProductformController::class, 'store'])->name('productform.store');
     
     // 購入関連のルート
     Route::get('purchase/{id}', [PurchaseController::class, 'show'])->name('purchase.show');

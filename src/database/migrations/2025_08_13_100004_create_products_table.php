@@ -15,13 +15,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('productcategory_id');
             $table->unsignedBigInteger('productstate_id');
-            $table->string('brand');
             $table->string('name');
             $table->text('detail');
             $table->decimal('value', 10, 2);
-            $table->string('image')->nullable();
+            $table->string('brand');
+            $table->string('image');
             $table->boolean('soldflg')->default(false);
-            $table->boolean('favoriteflg')->default(false);
             $table->timestamps();
 
             $table->foreign('productcategory_id')->references('id')->on('product_categories')->onDelete('cascade');

@@ -63,18 +63,19 @@
 }
 
 .form__button-submit {
-    background-color: #007bff;
+    background-color: #e74c3c;
     color: white;
     border: none;
     padding: 12px 24px;
     border-radius: 6px;
     font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 .form__button-submit:hover {
-    background-color: #0056b3;
+    background-color: #c0392b;
 }
 
 .form__button-reset {
@@ -228,18 +229,19 @@
 /* マイリストボタン */
 .mylist-btn {
     padding: 6px 12px;
-    background-color: #007bff;
+    background-color: #e74c3c;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
+    font-weight: bold;
     transition: background-color 0.3s;
     min-width: 60px;
 }
 
 .mylist-btn:hover {
-    background-color: #0056b3;
+    background-color: #c0392b;
 }
 
 .mylist-btn.in-mylist {

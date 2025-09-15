@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\DB;
 
 class ProductFactory extends Factory
 {
@@ -60,13 +61,13 @@ class ProductFactory extends Factory
         return [
             'productcategory_id' => $categoryId,
             'productstate_id' => \App\Models\ProductState::inRandomOrder()->first()->id,
+            'name' => $this->faker->unique()->randomElement($productNames),
+            'detail' => $this->faker->randomElement($productDetails),
+            'value' => $this->faker->numberBetween($minPrice[0], $minPrice[1]),
             'brand' => $this->faker->randomElement([
                 'Apple', 'Samsung', 'Sony', 'Nike', 'Adidas',
                 'Uniqlo', 'Zara', 'H&M', 'IKEA', 'MUJI'
             ]),
-            'name' => $this->faker->unique()->randomElement($productNames),
-            'detail' => $this->faker->randomElement($productDetails),
-            'value' => $this->faker->numberBetween($minPrice[0], $minPrice[1]),
             'image' => $this->faker->randomElement([
                 'productimages/20250813/001/laptop.jpg',
                 'productimages/20250813/002/shoes.jpg',
@@ -75,7 +76,6 @@ class ProductFactory extends Factory
                 'productimages/20250813/005/coffee-grinder.jpg'
             ]),
             'soldflg' => $this->faker->boolean(30), // 30%の確率でtrue（売却済み）
-            'favoriteflg' => $this->faker->boolean(30), // 20%の確率でtrue（お気に入り）
         ];
     }
 }

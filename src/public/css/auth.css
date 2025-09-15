@@ -93,22 +93,23 @@
 }
 
 .form__button-submit {
-    padding: 10px 20px;
+    padding: 15px 40px;
     width: 50%;
     max-width: 300px;
     height: 50px;
     border: none;
     border-radius: 8px;
-    background: #9e743e;
+    background: #e74c3c;
     color: #fff;
     cursor: pointer;
     font-size: 16px;
+    font-weight: bold;
     white-space: nowrap;
     transition: background-color 0.3s ease;
 }
 
 .form__button-submit:hover {
-    background: #8a6a35;
+    background: #c0392b;
 }
 
 /* レスポンシブ対応 */

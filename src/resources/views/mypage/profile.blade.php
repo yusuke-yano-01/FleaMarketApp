@@ -13,9 +13,15 @@
         <div class="user-main-info">
             <div class="user-avatar">
                 @php
-                    $imagePath = $user->profile_image ? asset('storage/' . $user->profile_image) : asset('images/default_user_icon.png');
+                    $imagePath = asset('storage/userimages/default_user_icon.png');
+                    if ($user->image) {
+                        $fullPath = public_path($user->image);
+                        if (file_exists($fullPath)) {
+                            $imagePath = asset($user->image);
+                        }
+                    }
                 @endphp
-                <img src="{{ $imagePath }}" alt="ユーザー画像" class="avatar-image" onerror="this.src='/images/default_user_icon.png'">
+                <img src="{{ $imagePath }}" alt="ユーザー画像" class="avatar-image" onerror="this.src='{{ asset('storage/userimages/default_user_icon.png') }}'">
             </div>
             <div class="user-profile-info">
                 <h1 class="user-name">{{ $user->name }}</h1>

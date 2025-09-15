@@ -35,13 +35,16 @@ class AuthController extends Controller
 
     public function register(UsersRequest $request)
     {
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
         
-        return view('auth.login');
+        // 登録後、自動ログインしてプロフィール設定画面へ
+        Auth::login($user);
+        
+        return redirect()->route('profile.setup');
     }
 
     public function logout()

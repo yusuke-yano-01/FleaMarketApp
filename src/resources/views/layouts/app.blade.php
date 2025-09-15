@@ -12,7 +12,7 @@
   @yield('css')
 </head>
 
-<body style="background-color: rgb(255, 236, 211); margin: 0; padding: 0;">
+<body>
   <header class="header">
     <div class="header__inner">
       <div class="header-utilities">
@@ -27,6 +27,7 @@
                   @csrf
                   <button class="header-nav__link header-nav__logout-btn">ログアウト</button>
                 </form>
+                <a class="header-nav__link header-nav__product-btn" href="/productform">出品</a>
               </div>
             @elseif (request()->path() === 'auth/login')
               <a class="header-nav__link" href="/auth/register">register</a>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductState;
@@ -16,6 +17,15 @@ class ProductListController extends Controller
 {
     public function index(Request $request)
     {
+        // 認証済みユーザーの住所チェック
+        if (Auth::check()) {
+            $user = Auth::user();
+            if (empty($user->postcode) || empty($user->address) || !$user->registeredflg) {
+                return redirect()->route('profile.setup')
+                    ->with('info', 'プロフィール設定を完了してください。');
+            }
+        }
+        
         // おすすめ商品を取得（デフォルト表示）
         $recommendedProducts = $this->getRecommendedProducts() ?? collect();
         
@@ -54,7 +64,13 @@ class ProductListController extends Controller
      */
     public function show($id)
     {
+        // デバッグ用：商品IDをログに出力
+        \Log::info('商品詳細ページアクセス。商品ID: ' . $id);
+        
         $product = Product::with(['category', 'state', 'comments.userProductRelation.user'])->findOrFail($id);
+        
+        // デバッグ用：商品が見つかったかログに出力
+        \Log::info('商品が見つかりました: ' . $product->name);
         
         return view('productslist.productdetail', compact('product'));
     }
@@ -65,10 +81,15 @@ class ProductListController extends Controller
     private function getRecommendedProducts()
     {
         // 最新の商品をおすすめとして表示（売却済み商品を除外）
-        return Product::with(['category', 'state'])
+        $products = Product::with(['category', 'state'])
             ->where('soldflg', false)
             ->orderBy('created_at', 'desc')
             ->paginate(12);
+            
+        // デバッグ用：取得された商品数をログに出力
+        \Log::info('おすすめ商品数: ' . $products->count());
+        
+        return $products;
     }
     
     /**
@@ -141,11 +162,18 @@ class ProductListController extends Controller
             return response()->json(['message' => '既にマイリストに追加されています。'], 400);
         }
         
+        // デフォルト住所を取得（最初の住所を使用）
+        $defaultAddress = \DB::table('address')->first();
+        if (!$defaultAddress) {
+            return response()->json(['error' => '住所データが見つかりません。'], 500);
+        }
+        
         // マイリストに追加
         UserProductRelation::create([
             'user_id' => $user->id,
             'product_id' => $productId,
             'userproducttype_id' => $mylistType->id,
+            'address_id' => $defaultAddress->id,
         ]);
         
         return response()->json(['message' => 'マイリストに追加しました。']);
@@ -196,25 +224,14 @@ class ProductListController extends Controller
 
         $product = Product::findOrFail($id);
         
-        // マイリストタイプを取得（コメント用）
-        $commentType = UserProductType::where('name', 'コメント')->first();
-        if (!$commentType) {
-            $commentType = UserProductType::create(['name' => 'コメント']);
-        }
-        
-        // UserProductRelationを作成または取得
-        $userProductRelation = UserProductRelation::firstOrCreate([
+        // コメントを直接作成
+        $comment = Comment::create([
             'product_id' => $product->id,
             'user_id' => Auth::id(),
-            'userproducttype_id' => $commentType->id,
-        ]);
-        
-        $comment = Comment::create([
-            'userproductrelation_id' => $userProductRelation->id,
             'comment' => $request->comment,
         ]);
 
-        $comment->load('userProductRelation.user');
+        $comment->load('user');
 
         return response()->json([
             'success' => true,

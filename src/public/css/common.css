@@ -9,6 +9,7 @@
 body {
     margin: 0 !important;
     padding: 0 !important;
+    background-color: #ffffff;
 }
 
 html {
@@ -88,6 +89,19 @@ html {
     box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
 }
 
+.header-nav__product-btn {
+    background-color: #ffffff;
+    color: #333333;
+    border: 2px solid #333333;
+}
+
+.header-nav__product-btn:hover {
+    background-color: #333333;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 .header-nav__button {
     color: #9e743e;
     padding: 8px 16px;
@@ -112,6 +126,11 @@ html {
     display: flex;
     align-items: center;
     gap: 15px;
+    margin-left: auto;
+}
+
+.header-nav__product-btn {
+    margin-left: auto;
 }
 
 .header-nav__logout {

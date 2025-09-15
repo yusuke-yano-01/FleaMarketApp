@@ -24,10 +24,11 @@ class ProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'image' => ['nullable', 'image', 'mimes:jpeg,png', 'max:2048'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'name' => ['required', 'string', 'max:20'],
-            'postcode' => ['required', 'string', 'regex:/^\d{3}-\d{4}$/'],
-            'address' => ['required', 'string'],
+            'postcode' => ['required', 'string', 'max:10'],
+            'address' => ['required', 'string', 'max:255'],
+            'building' => ['nullable', 'string', 'max:255'],
         ];
     }
 
@@ -39,14 +40,16 @@ class ProfileRequest extends FormRequest
     public function messages()
     {
         return [
-            'image.image' => 'プロフィール画像は画像ファイルを選択してください',
-            'image.mimes' => 'プロフィール画像はJPEGまたはPNG形式で選択してください',
-            'image.max' => 'プロフィール画像は2MB以下のファイルを選択してください',
-            'name.required' => 'ユーザー名を入力してください',
-            'name.max' => 'ユーザー名は20文字以内で入力してください',
-            'postcode.required' => '郵便番号を入力してください',
-            'postcode.regex' => '郵便番号は「123-4567」の形式で入力してください',
-            'address.required' => '住所を入力してください',
+            'image.image' => '画像ファイルを選択してください。',
+            'image.mimes' => '画像はjpeg、png、jpg、gif形式のみ対応しています。',
+            'image.max' => '画像サイズは2MB以下にしてください。',
+            'name.required' => 'ユーザー名を入力してください。',
+            'name.max' => 'ユーザー名は20文字以内で入力してください。',
+            'postcode.required' => '郵便番号は必須です。',
+            'postcode.max' => '郵便番号は10文字以内で入力してください。',
+            'address.required' => '住所は必須です。',
+            'address.max' => '住所は255文字以内で入力してください。',
+            'building.max' => '建物名は255文字以内で入力してください。',
         ];
     }
 }

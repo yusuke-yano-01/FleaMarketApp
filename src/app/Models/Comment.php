@@ -10,15 +10,24 @@ class Comment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'userproductrelation_id',
+        'product_id',
+        'user_id',
         'comment',
     ];
 
     /**
-     * Get the user product relation that owns the comment.
+     * Get the product that owns the comment.
      */
-    public function userProductRelation()
+    public function product()
     {
-        return $this->belongsTo(UserProductRelation::class);
+        return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * Get the user that owns the comment.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         // マスターデータの投入
         $this->call([
             UsersSeeder::class,              // ユーザー（最初に実行）
+            AddressSeeder::class,            // 住所
             ProductCategoriesSeeder::class,  // 商品カテゴリー
             ProductStatesSeeder::class,      // 商品状態
             UserProductTypesSeeder::class,   // ユーザー商品タイプ
