@@ -16,12 +16,13 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('userproducttype_id');
-            $table->unsignedBigInteger('address_id');
+            $table->unsignedBigInteger('address_id')->nullable();
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('userproducttype_id')->references('id')->on('user_product_types')->onDelete('cascade');
+            $table->foreign('address_id')->references('id')->on('address')->onDelete('set null');
         });
     }
 

@@ -178,18 +178,11 @@ class ProductListController extends Controller
             return response()->json(['message' => '既にマイリストに追加されています。'], 400);
         }
         
-        // デフォルト住所を取得（最初の住所を使用）
-        $defaultAddress = \DB::table('address')->first();
-        if (!$defaultAddress) {
-            return response()->json(['error' => '住所データが見つかりません。'], 500);
-        }
-        
         // マイリストに追加
         UserProductRelation::create([
             'user_id' => $user->id,
             'product_id' => $productId,
             'userproducttype_id' => $mylistType->id,
-            'address_id' => $defaultAddress->id,
         ]);
         
         return response()->json(['message' => 'マイリストに追加しました。']);
