@@ -64,15 +64,27 @@ class ProductListController extends Controller
      */
     public function show($id)
     {
-        // デバッグ用：商品IDをログに出力
-        \Log::info('商品詳細ページアクセス。商品ID: ' . $id);
-        
-        $product = Product::with(['category', 'state', 'comments.user'])->findOrFail($id);
-        
-        // デバッグ用：商品が見つかったかログに出力
-        \Log::info('商品が見つかりました: ' . $product->name);
-        
-        return view('productslist.productdetail', compact('product'));
+        try {
+            // まず商品のみを取得
+            $product = Product::findOrFail($id);
+            
+            // カテゴリーと状態を個別に取得
+            $product->load(['category', 'state']);
+            
+            // コメントを個別に取得（エラーが発生した場合は空のコレクションを返す）
+            try {
+                $product->load(['comments.user']);
+            } catch (\Exception $e) {
+                \Log::error('コメント取得エラー: ' . $e->getMessage());
+                $product->setRelation('comments', collect());
+            }
+            
+            return view('productslist.productdetail', compact('product'));
+            
+        } catch (\Exception $e) {
+            \Log::error('商品詳細ページエラー: ' . $e->getMessage());
+            abort(404, '商品が見つかりません。');
+        }
     }
 
     /**

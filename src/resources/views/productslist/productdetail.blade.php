@@ -95,12 +95,12 @@
             <div class="comments-section">
                 <h3>コメント一覧</h3>
                 <div id="comments-list">
-                    @if($product->comments->count() > 0)
+                    @if($product->comments && $product->comments->count() > 0)
                         @foreach($product->comments->sortByDesc('created_at')->take(3) as $comment)
                             <div class="comment-item">
                                 <div class="comment-header">
-                                    <span class="comment-author">{{ $comment->user->name }}</span>
-                                    <span class="comment-date">{{ $comment->created_at->setTimezone('Asia/Tokyo')->format('Y/m/d H:i') }}</span>
+                                    <span class="comment-author">{{ $comment->user ? $comment->user->name : '不明なユーザー' }}</span>
+                                    <span class="comment-date">{{ $comment->created_at ? $comment->created_at->setTimezone('Asia/Tokyo')->format('Y/m/d H:i') : '' }}</span>
                                 </div>
                                 <div class="comment-content">{{ $comment->comment }}</div>
                             </div>
@@ -111,8 +111,8 @@
                                 @foreach($product->comments->sortByDesc('created_at')->skip(3) as $comment)
                                     <div class="comment-item">
                                         <div class="comment-header">
-                                            <span class="comment-author">{{ $comment->user->name }}</span>
-                                            <span class="comment-date">{{ $comment->created_at->setTimezone('Asia/Tokyo')->format('Y/m/d H:i') }}</span>
+                                            <span class="comment-author">{{ $comment->user ? $comment->user->name : '不明なユーザー' }}</span>
+                                            <span class="comment-date">{{ $comment->created_at ? $comment->created_at->setTimezone('Asia/Tokyo')->format('Y/m/d H:i') : '' }}</span>
                                         </div>
                                         <div class="comment-content">{{ $comment->comment }}</div>
                                     </div>
