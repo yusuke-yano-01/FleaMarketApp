@@ -67,7 +67,7 @@ class ProductListController extends Controller
         // デバッグ用：商品IDをログに出力
         \Log::info('商品詳細ページアクセス。商品ID: ' . $id);
         
-        $product = Product::with(['category', 'state', 'comments.userProductRelation.user'])->findOrFail($id);
+        $product = Product::with(['category', 'state', 'comments.user'])->findOrFail($id);
         
         // デバッグ用：商品が見つかったかログに出力
         \Log::info('商品が見つかりました: ' . $product->name);
