@@ -117,136 +117,161 @@ config:
   layout: dagre
 ---
 erDiagram
-    Users {
-        int id PK
+    users {
+        bigint id PK
         string name
         string postcode
         string address
         string building
         string image
         boolean registeredflg
+        string email UK
+        timestamp email_verified_at
+        string password
+        string remember_token
         timestamp created_at
         timestamp updated_at
     }
 
-    Products {
-        int id PK
-        int productcategory_id FK
-        int productstate_id FK
-        int productbrand_id FK
+    products {
+        bigint id PK
+        bigint productcategory_id FK
+        bigint productstate_id FK
         string name
         text detail
         decimal value
+        string brand
         string image
         boolean soldflg
         timestamp created_at
         timestamp updated_at
     }
 
-    ProductCategories {
-        int id PK
+    product_categories {
+        bigint id PK
         string name
+        timestamp created_at
+        timestamp updated_at
     }
 
-    ProductStates {
-        int id PK
+    product_states {
+        bigint id PK
         string name
+        timestamp created_at
+        timestamp updated_at
     }
 
-    ProductBrands {
-        int id PK
+    user_product_relations {
+        bigint id PK
+        bigint product_id FK
+        bigint user_id FK
+        bigint userproducttype_id FK
+        bigint address_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    user_product_types {
+        bigint id PK
         string name
+        timestamp created_at
+        timestamp updated_at
     }
 
-    UserProductRelation {
-        int id PK
-        int product_id FK
-        int user_id FK
-        int userproducttype_id FK
-        int address_id FK
-    }
-
-    UserProductType {
-        int id PK
-        string name
-    }
-
-    Address {
-        int id PK
+    address {
+        bigint id PK
         string postcode
         string address
         string building
+        timestamp created_at
+        timestamp updated_at
     }
 
-    Comments {
-        int id PK
-        int userproductrelation_id FK
+    comments {
+        bigint id PK
+        bigint product_id FK
+        bigint user_id FK
         string comment
+        timestamp created_at
+        timestamp updated_at
     }
 
     %% リレーションシップ
-    UserProductRelation ||--o{ Comments : "has many"
+    products ||--|| product_categories : "belongs to"
+    products ||--|| product_states : "belongs to"
 
-    Products ||--o{ UserProductRelation : "belongs to"
-    Users ||--o{ UserProductRelation : "has many"
-    UserProductType ||--o{ UserProductRelation : "categorizes"
-    Address ||--o{ UserProductRelation : "located at"
+    user_product_relations ||--|| products : "references"
+    user_product_relations ||--|| users : "references"
+    user_product_relations ||--|| user_product_types : "references"
+    user_product_relations ||--|| address : "references"
 
-    ProductCategories ||--o{ Products : "categorizes"
-    ProductStates ||--o{ Products : "describes"
-    ProductBrands ||--o{ Products : "brands"
+    comments ||--|| products : "belongs to"
+    comments ||--|| users : "belongs to"
 ```
 
 ### フィールド詳細
 
-#### Users テーブル
+#### users テーブル
 
 -   ユーザー情報を管理
 -   住所情報（postcode, address, building）を含む
 -   プロフィール画像（image）を保存
 -   登録フラグ（registeredflg）でユーザー状態を管理
+-   メールアドレス（email）でユニーク制約
 
-#### Products テーブル
+#### products テーブル
 
 -   商品情報を管理
--   カテゴリ、状態、ブランドとの関連付け
+-   カテゴリ、状態との関連付け
+-   ブランド情報は文字列フィールド（brand）で管理
 -   売却フラグ（soldflg）で商品の販売状況を管理
 
-#### ProductCategories テーブル
+#### product_categories テーブル
 
 -   商品カテゴリを管理
--   例：「服・ファッション」「家電・スマホ・カメラ」など
+-   例：「Electronics」「Clothing」「Books」「Home & Garden」「Sports」など
 
-#### ProductStates テーブル
+#### product_states テーブル
 
 -   商品の状態を管理
 -   例：「新品・未使用」「未使用に近い」「目立った傷や汚れなし」など
 
-#### ProductBrands テーブル
-
--   商品ブランドを管理
--   例：「NIKE」「Apple」「UNIQLO」など
-
-#### UserProductRelation テーブル
+#### user_product_relations テーブル
 
 -   ユーザーと商品の関係を管理
 -   マイリスト、購入履歴、お気に入りなどの種別を管理
 -   配送先住所との関連付け
 
-#### UserProductType テーブル
+#### user_product_types テーブル
 
 -   ユーザーと商品の関係の種別を管理
--   例：「マイリスト」「購入履歴」「お気に入り」など
+-   例：「mylist」「purchase」など
 
-#### Address テーブル
+#### address テーブル
 
 -   配送先住所を管理
 -   複数の配送先を管理可能
 
-#### Comments テーブル
+#### comments テーブル
 
 -   商品へのコメントを管理
--   UserProductRelation との関連付けで、特定の購入・マイリストに関連するコメントを管理
+-   商品（products）とユーザー（users）に直接関連
+-   userproductrelation_id は削除され、直接的な関連に変更
+
+### 主な変更点
+
+1. **productbrands テーブルを削除**
+
+    - ブランド情報は products テーブルの brand カラムで管理
+
+2. **comments テーブルの構造変更**
+
+    - userproductrelation_id を削除
+    - product_id と user_id を直接参照するように変更
+
+3. **テーブル名の統一**
+    - スネークケース（snake_case）に統一
+    - Laravel の命名規則に準拠
 
 ## URL
 
