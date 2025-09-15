@@ -56,6 +56,16 @@ class ProductformController extends Controller
             
             // 商品を作成
             \Log::info('商品作成開始');
+            \Log::info('リクエストデータ: ' . json_encode([
+                'name' => $request->name,
+                'brand' => $request->brand,
+                'description' => $request->description,
+                'price' => $request->price,
+                'category_id' => $request->category_id,
+                'state_id' => $request->state_id,
+                'image_path' => $imagePath
+            ]));
+            
             $product = Product::create([
                 'name' => $request->name,
                 'brand' => $request->brand,
@@ -66,6 +76,9 @@ class ProductformController extends Controller
                 'image' => $imagePath,
             ]);
             \Log::info('商品作成完了。ID: ' . $product->id);
+            
+            // 作成された商品の詳細をログに出力
+            \Log::info('作成された商品: ' . json_encode($product->toArray()));
             
             return redirect()->route('productlist.index')
                 ->with('success', '商品を出品しました。');

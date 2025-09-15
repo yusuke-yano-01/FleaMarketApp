@@ -101,6 +101,10 @@ class ProductListController extends Controller
         // デバッグ用：取得された商品数をログに出力
         \Log::info('おすすめ商品数: ' . $products->count());
         
+        // デバッグ用：商品ID一覧をログに出力
+        $productIds = $products->pluck('id')->toArray();
+        \Log::info('商品ID一覧: ' . json_encode($productIds));
+        
         return $products;
     }
     
