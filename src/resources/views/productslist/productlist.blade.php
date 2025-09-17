@@ -10,6 +10,13 @@
 <div class="productlist__content">
   <div class="productlist__heading">
     <h2>商品一覧</h2>
+    @auth
+    <div style="margin-top: 10px;">
+      <button id="createTestDataBtn" class="form__button-submit" style="padding: 8px 16px; font-size: 14px;">
+        テスト用：購入済みデータを作成
+      </button>
+    </div>
+    @endauth
   </div>
   
   <!-- 検索フォーム -->
@@ -158,6 +165,28 @@ document.addEventListener('DOMContentLoaded', function() {
         event.target.classList.add('active');
         document.getElementById(tabName + '-content').classList.add('active');
     }
+    
+    // テスト用購入済みデータ作成ボタン
+    document.getElementById('createTestDataBtn').addEventListener('click', function() {
+        fetch('/test/create-purchased-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message || data.error);
+            if (data.message) {
+                location.reload(); // ページをリロードしてアイコンを確認
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('エラーが発生しました。');
+        });
+    });
 });
 </script>
 @else
