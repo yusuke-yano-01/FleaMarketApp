@@ -19,11 +19,11 @@
             <form method="POST" action="{{ route('purchase.address.update', $product->id) }}">
                 @csrf
                 <div class="form-group">
-                    <label for="postal_code" class="form-label">郵便番号 <span class="required">*</span></label>
-                    <input type="text" id="postal_code" name="postal_code" class="form-input" 
-                           value="{{ old('postal_code', $user->postal_code ?? '150-0013') }}" 
+                    <label for="postcode" class="form-label">郵便番号 <span class="required">*</span></label>
+                    <input type="text" id="postcode" name="postcode" class="form-input" 
+                           value="{{ old('postcode', $user->postcode ?? '150-0013') }}" 
                            placeholder="150-0013" required>
-                    @error('postal_code')
+                    @error('postcode')
                         <div class="error-message">{{ $message }}</div>
                     @enderror
                 </div>

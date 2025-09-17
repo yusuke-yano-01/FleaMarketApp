@@ -62,11 +62,11 @@
                     <div class="address-info">
                         <div class="detail-item">
                             <label class="detail-label">郵便番号:</label>
-                            <span class="detail-value">{{ Auth::user()->postal_code ?? '150-0013' }}</span>
+                            <span class="detail-value">{{ Auth::user()->postcode ?? '郵便番号を登録してください' }}</span>
                         </div>
                         <div class="detail-item">
                             <label class="detail-label">住所:</label>
-                            <span class="detail-value">{{ Auth::user()->address ?? '東京都渋谷区恵比寿1-1-1' }}{{ Auth::user()->building ? ' ' . Auth::user()->building : '' }}</span>
+                            <span class="detail-value">{{ Auth::user()->address ?? '住所を登録してください' }}{{ Auth::user()->building ? ' ' . Auth::user()->building : '' }}</span>
                         </div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                     <form method="POST" action="{{ route('purchase.process', $product->id) }}" id="purchase-form">
                         @csrf
                         <input type="hidden" name="payment_method" id="payment_method_hidden">
-                        <input type="hidden" name="shipping_postal" value="{{ Auth::user()->postal_code ?? '150-0013' }}">
+                        <input type="hidden" name="shipping_postal" value="{{ Auth::user()->postcode ?? '150-0013' }}">
                         <input type="hidden" name="shipping_address" value="{{ Auth::user()->address ?? '東京都渋谷区恵比寿1-1-1' }}{{ Auth::user()->building ? ' ' . Auth::user()->building : '' }}">
                         <button type="button" class="purchase-confirm-btn" onclick="submitPurchase()">購入する</button>
                     </form>

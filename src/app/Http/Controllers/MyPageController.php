@@ -17,10 +17,23 @@ class MyPageController extends Controller
     {
         $user = Auth::user();
         
-        // TODO: 実際の出品・購入履歴データを取得する実装が必要
-        // 現在はダミーデータとして空のコレクションを返す
-        $soldProducts = collect(); // ユーザーが出品した商品
-        $boughtProducts = collect(); // ユーザーが購入した商品
+        // 出品した商品を取得（Sellerタイプのrelation）
+        $soldProducts = UserProductRelation::where('user_id', $user->id)
+            ->whereHas('type', function($query) {
+                $query->where('name', 'Seller');
+            })
+            ->with(['product.category', 'product.state'])
+            ->get()
+            ->pluck('product');
+        
+        // 購入した商品を取得（Buyerタイプのrelation）
+        $boughtProducts = UserProductRelation::where('user_id', $user->id)
+            ->whereHas('type', function($query) {
+                $query->where('name', 'Buyer');
+            })
+            ->with(['product.category', 'product.state'])
+            ->get()
+            ->pluck('product');
         
         return view('mypage.profile', compact('user', 'soldProducts', 'boughtProducts'));
     }

@@ -79,7 +79,7 @@ class PurchaseController extends Controller
     public function updateAddress(Request $request, $id)
     {
         $request->validate([
-            'postal_code' => 'required|string|max:10',
+            'postcode' => 'required|string|max:10',
             'address' => 'required|string|max:255',
             'building' => 'nullable|string|max:255',
         ]);
@@ -87,7 +87,7 @@ class PurchaseController extends Controller
         // ユーザー情報を更新
         $user = Auth::user();
         $user->update([
-            'postal_code' => $request->postal_code,
+            'postcode' => $request->postcode,
             'address' => $request->address,
             'building' => $request->building,
         ]);

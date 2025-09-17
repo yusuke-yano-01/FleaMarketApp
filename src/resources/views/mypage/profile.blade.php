@@ -45,8 +45,18 @@
                 @if(isset($soldProducts) && $soldProducts->count() > 0)
                     @foreach($soldProducts as $product)
                     <div class="product-item">
-                        <img src="{{ $product->image ? asset('storage/productimages/' . $product->image) : asset('images/no-image.png') }}" alt="{{ $product->name }}" class="product-image" onerror="this.src='/images/no-image.png'">
-                        <div class="product-name">{{ $product->name }}</div>
+                        <a href="{{ route('productdetail.show', $product->id) }}">
+                            <img src="{{ $product->image ? asset('storage/productimages/' . $product->image) : asset('images/no-image.png') }}" alt="{{ $product->name }}" class="product-image" onerror="this.src='/images/no-image.png'">
+                            <div class="product-info">
+                                <div class="product-name">{{ $product->name }}</div>
+                                <div class="product-price">¥{{ number_format($product->value) }}</div>
+                                <div class="product-category">{{ $product->category->name ?? 'カテゴリなし' }}</div>
+                                <div class="product-state">{{ $product->state->name ?? '状態なし' }}</div>
+                                @if($product->soldflg)
+                                    <div class="sold-badge">売り切れ</div>
+                                @endif
+                            </div>
+                        </a>
                     </div>
                     @endforeach
                 @else
@@ -61,8 +71,15 @@
                 @if(isset($boughtProducts) && $boughtProducts->count() > 0)
                     @foreach($boughtProducts as $product)
                     <div class="product-item">
-                        <img src="{{ $product->image ? asset('storage/productimages/' . $product->image) : asset('images/no-image.png') }}" alt="{{ $product->name }}" class="product-image" onerror="this.src='/images/no-image.png'">
-                        <div class="product-name">{{ $product->name }}</div>
+                        <a href="{{ route('productdetail.show', $product->id) }}">
+                            <img src="{{ $product->image ? asset('storage/productimages/' . $product->image) : asset('images/no-image.png') }}" alt="{{ $product->name }}" class="product-image" onerror="this.src='/images/no-image.png'">
+                            <div class="product-info">
+                                <div class="product-name">{{ $product->name }}</div>
+                                <div class="product-price">¥{{ number_format($product->value) }}</div>
+                                <div class="product-category">{{ $product->category->name ?? 'カテゴリなし' }}</div>
+                                <div class="product-state">{{ $product->state->name ?? '状態なし' }}</div>
+                            </div>
+                        </a>
                     </div>
                     @endforeach
                 @else
