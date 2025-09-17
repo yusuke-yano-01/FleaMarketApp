@@ -52,6 +52,12 @@
             <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/no-image.png') }}" 
                  alt="{{ $product->name }}" 
                  onerror=this.src="{{ asset('images/no-image.png') }}">
+            @if($product->is_purchased ?? false)
+              <div class="purchased-icon">
+                <i class="fas fa-check-circle"></i>
+                <span>購入済み</span>
+              </div>
+            @endif
           </a>
         </div>
         <div class="product-name">{{ $product->name }}</div>
@@ -75,6 +81,12 @@
             <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/no-image.png') }}" 
                  alt="{{ $product->name }}" 
                  onerror=this.src="{{ asset('images/no-image.png') }}">
+            @if($product->is_purchased ?? false)
+              <div class="purchased-icon">
+                <i class="fas fa-check-circle"></i>
+                <span>購入済み</span>
+              </div>
+            @endif
           </a>
         </div>
         <div class="product-name">{{ $product->name }}</div>
@@ -108,6 +120,12 @@
             <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/no-image.png') }}" 
                  alt="{{ $product->name }}" 
                  onerror=this.src="{{ asset('images/no-image.png') }}">
+            @if($product->is_purchased ?? false)
+              <div class="purchased-icon">
+                <i class="fas fa-check-circle"></i>
+                <span>購入済み</span>
+              </div>
+            @endif
           </a>
         </div>
         <div class="product-name">{{ $product->name }}</div>
