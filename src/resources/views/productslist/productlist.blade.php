@@ -65,6 +65,10 @@
                 <span>購入済み</span>
               </div>
             @endif
+            <!-- デバッグ情報 -->
+            <div style="position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.7); color: white; padding: 2px 5px; font-size: 10px; border-radius: 3px;">
+              ID:{{ $product->id }} {{ $product->is_purchased ? '購入済み' : '未購入' }}
+            </div>
           </a>
         </div>
         <div class="product-name">{{ $product->name }}</div>
