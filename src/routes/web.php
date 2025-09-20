@@ -74,8 +74,5 @@ Route::middleware(['auth', 'profile.setup'])->group(function () {
     Route::get('purchase/{id}/complete', [PurchaseController::class, 'complete'])->name('purchase.complete');
     Route::get('purchase/{id}/address/edit', [PurchaseController::class, 'editAddress'])->name('purchase.address.edit');
     Route::post('purchase/{id}/address/update', [PurchaseController::class, 'updateAddress'])->name('purchase.address.update');
-    
-    // テスト用ルート
-    Route::post('test/create-purchased-data', [ProductListController::class, 'createTestPurchasedData'])->name('test.create-purchased-data');
 });
 

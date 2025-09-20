@@ -195,9 +195,6 @@
     overflow: hidden;
     background: #f8f9fa;
     cursor: pointer;
-}
-
-.product-image {
     position: relative;
 }
 
@@ -215,28 +212,29 @@
 /* 購入済みアイコン */
 .purchased-icon {
     position: absolute;
-    bottom: 8px;
-    left: 8px;
-    background-color: rgba(40, 167, 69, 0.95);
+    bottom: 0px;
+    left: 0px;
+    background-color: #28a745;
     color: white;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 11px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-size: 8px;
     font-weight: bold;
     display: flex;
     align-items: center;
-    gap: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    border: 2px solid white;
+    gap: 2px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    border: 1px solid white;
+    white-space: nowrap;
 }
 
 .purchased-icon i {
-    font-size: 12px;
+    font-size: 8px;
 }
 
 .purchased-icon span {
-    font-size: 10px;
+    font-size: 8px;
     white-space: nowrap;
 }
 
@@ -251,6 +249,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #ffffff;
+    border-top: 1px solid #ddd;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .product-actions {
@@ -507,18 +508,19 @@
 
     /* 購入済みアイコンのレスポンシブ対応 */
     .purchased-icon {
-        bottom: 6px;
-        left: 6px;
-        padding: 3px 6px;
-        font-size: 10px;
-        border-radius: 10px;
+        bottom: 0px;
+        left: 0px;
+        padding: 1px 2px;
+        font-size: 7px;
+        border-radius: 3px;
     }
 
     .purchased-icon i {
-        font-size: 10px;
+        font-size: 7px;
     }
 
     .purchased-icon span {
-        font-size: 9px;
+        font-size: 7px;
     }
 }
+

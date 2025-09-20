@@ -10,13 +10,6 @@
 <div class="productlist__content">
   <div class="productlist__heading">
     <h2>商品一覧</h2>
-    @auth
-    <div style="margin-top: 10px;">
-      <button id="createTestDataBtn" class="form__button-submit" style="padding: 8px 16px; font-size: 14px;">
-        テスト用：購入済みデータを作成
-      </button>
-    </div>
-    @endauth
   </div>
   
   <!-- 検索フォーム -->
@@ -59,17 +52,13 @@
             <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/no-image.png') }}" 
                  alt="{{ $product->name }}" 
                  onerror=this.src="{{ asset('images/no-image.png') }}">
-            @if($product->is_purchased ?? false)
-              <div class="purchased-icon">
-                <i class="fas fa-check-circle"></i>
-                <span>購入済み</span>
-              </div>
-            @endif
-            <!-- デバッグ情報 -->
-            <div style="position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.7); color: white; padding: 2px 5px; font-size: 10px; border-radius: 3px;">
-              ID:{{ $product->id }} {{ $product->is_purchased ? '購入済み' : '未購入' }}
-            </div>
           </a>
+          @if($product->is_purchased ?? false)
+            <div class="purchased-icon">
+              <i class="fas fa-check-circle"></i>
+              <span>購入済み</span>
+            </div>
+          @endif
         </div>
         <div class="product-name">{{ $product->name }}</div>
       </div>
@@ -92,13 +81,13 @@
             <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/no-image.png') }}" 
                  alt="{{ $product->name }}" 
                  onerror=this.src="{{ asset('images/no-image.png') }}">
-            @if($product->is_purchased ?? false)
-              <div class="purchased-icon">
-                <i class="fas fa-check-circle"></i>
-                <span>購入済み</span>
-              </div>
-            @endif
           </a>
+          @if($product->is_purchased ?? false)
+            <div class="purchased-icon">
+              <i class="fas fa-check-circle"></i>
+              <span>購入済み</span>
+            </div>
+          @endif
         </div>
         <div class="product-name">{{ $product->name }}</div>
       </div>
@@ -131,13 +120,13 @@
             <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/no-image.png') }}" 
                  alt="{{ $product->name }}" 
                  onerror=this.src="{{ asset('images/no-image.png') }}">
-            @if($product->is_purchased ?? false)
-              <div class="purchased-icon">
-                <i class="fas fa-check-circle"></i>
-                <span>購入済み</span>
-              </div>
-            @endif
           </a>
+          @if($product->is_purchased ?? false)
+            <div class="purchased-icon">
+              <i class="fas fa-check-circle"></i>
+              <span>購入済み</span>
+            </div>
+          @endif
         </div>
         <div class="product-name">{{ $product->name }}</div>
       </div>
@@ -170,27 +159,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById(tabName + '-content').classList.add('active');
     }
     
-    // テスト用購入済みデータ作成ボタン
-    document.getElementById('createTestDataBtn').addEventListener('click', function() {
-        fetch('/test/create-purchased-data', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message || data.error);
-            if (data.message) {
-                location.reload(); // ページをリロードしてアイコンを確認
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('エラーが発生しました。');
-        });
-    });
 });
 </script>
 @else

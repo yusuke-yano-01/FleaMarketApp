@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductState;
@@ -102,13 +101,6 @@ class ProductListController extends Controller
         
         // 購入済みフラグを追加
         $this->addPurchasedFlags($products);
-            
-        // デバッグ用：取得された商品数をログに出力
-        \Log::info('おすすめ商品数: ' . $products->count());
-        
-        // デバッグ用：商品ID一覧をログに出力
-        $productIds = $products->pluck('id')->toArray();
-        \Log::info('商品ID一覧: ' . json_encode($productIds));
         
         return $products;
     }
@@ -258,6 +250,7 @@ class ProductListController extends Controller
         ]);
     }
     
+
     /**
      * 商品に購入済みフラグを追加
      */
@@ -274,10 +267,7 @@ class ProductListController extends Controller
         $user = Auth::user();
         $buyerType = UserProductType::where('name', 'Buyer')->first();
         
-        Log::info("User ID: {$user->id}, Buyer Type: " . ($buyerType ? $buyerType->id : 'null'));
-        
         if (!$buyerType) {
-            Log::warning("Buyerタイプが見つかりません");
             // Buyerタイプが存在しない場合はすべての商品に購入済みフラグをfalseに設定
             foreach ($products as $product) {
                 $product->is_purchased = false;
@@ -294,52 +284,6 @@ class ProductListController extends Controller
         // 各商品に購入済みフラグを設定
         foreach ($products as $product) {
             $product->is_purchased = in_array($product->id, $purchasedProductIds);
-            if ($product->is_purchased) {
-                Log::info("購入済み商品発見: Product ID {$product->id}, Name: {$product->name}");
-            }
         }
-        
-        Log::info("購入済み商品ID一覧: " . json_encode($purchasedProductIds));
-    }
-    
-    /**
-     * テスト用：購入済みデータを作成
-     */
-    public function createTestPurchasedData()
-    {
-        if (!Auth::check()) {
-            return response()->json(['error' => 'ログインが必要です。']);
-        }
-        
-        $user = Auth::user();
-        $buyerType = UserProductType::where('name', 'Buyer')->first();
-        
-        if (!$buyerType) {
-            // Buyerタイプを作成
-            $buyerType = UserProductType::create(['name' => 'Buyer']);
-        }
-        
-        // 最初の商品を購入済みとしてマーク
-        $firstProduct = Product::first();
-        if ($firstProduct) {
-            // 既存の関係を削除してから新規作成
-            UserProductRelation::where('user_id', $user->id)
-                ->where('product_id', $firstProduct->id)
-                ->where('userproducttype_id', $buyerType->id)
-                ->delete();
-                
-            UserProductRelation::create([
-                'user_id' => $user->id,
-                'product_id' => $firstProduct->id,
-                'userproducttype_id' => $buyerType->id,
-            ]);
-            
-            return response()->json([
-                'message' => "商品「{$firstProduct->name}」を購入済みとしてマークしました。",
-                'product_id' => $firstProduct->id
-            ]);
-        }
-        
-        return response()->json(['error' => '商品が見つかりません。']);
     }
 }
