@@ -46,7 +46,7 @@
                     @foreach($soldProducts as $product)
                     <div class="product-item">
                         <a href="{{ route('productlist.product', $product->id) }}">
-                            <img src="{{ $product->image ? asset('storage/productimages/' . $product->image) : asset('images/no-image.png') }}" alt="{{ $product->name }}" class="product-image" onerror="this.src='/images/no-image.png'">
+                            <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/no-image.png') }}" alt="{{ $product->name }}" class="product-image" onerror="this.src='{{ asset('images/no-image.png') }}'">
                             <div class="product-info">
                                 <div class="product-name">{{ $product->name }}</div>
                                 <div class="product-price">¥{{ number_format($product->value) }}</div>
@@ -72,7 +72,7 @@
                     @foreach($boughtProducts as $product)
                     <div class="product-item">
                         <a href="{{ route('productlist.product', $product->id) }}">
-                            <img src="{{ $product->image ? asset('storage/productimages/' . $product->image) : asset('images/no-image.png') }}" alt="{{ $product->name }}" class="product-image" onerror="this.src='/images/no-image.png'">
+                            <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/no-image.png') }}" alt="{{ $product->name }}" class="product-image" onerror="this.src='{{ asset('images/no-image.png') }}'">
                             <div class="product-info">
                                 <div class="product-name">{{ $product->name }}</div>
                                 <div class="product-price">¥{{ number_format($product->value) }}</div>
