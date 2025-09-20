@@ -18,6 +18,7 @@ class UserProductRelation extends Model
         'product_id',
         'user_id',
         'userproducttype_id',
+        'address_id',
     ];
 
     /**
@@ -42,6 +43,14 @@ class UserProductRelation extends Model
     public function type()
     {
         return $this->belongsTo(UserProductType::class, 'userproducttype_id');
+    }
+
+    /**
+     * Get the address for the user product relation.
+     */
+    public function address()
+    {
+        return $this->belongsTo(Address::class);
     }
 
     /**

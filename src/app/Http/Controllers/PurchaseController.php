@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
+use App\Models\Address;
+use App\Models\UserProductRelation;
+use App\Http\Requests\AddressRequest;
 
 class PurchaseController extends Controller
 {
@@ -14,8 +17,38 @@ class PurchaseController extends Controller
     public function show($id)
     {
         $product = Product::with(['category', 'state'])->findOrFail($id);
+        $user = Auth::user();
         
-        return view('purchase.purchase', compact('product'));
+        // 商品に対する購入関係のレコードを確認（Buyer または 未購入）
+        $purchaseRelation = UserProductRelation::where('user_id', $user->id)
+            ->where('product_id', $product->id)
+            ->whereIn('userproducttype_id', [2, 4]) // Buyer または 未購入
+            ->with('address')
+            ->first();
+        
+        // 購入関係のレコードがない場合は「未購入」レコードを作成
+        if (!$purchaseRelation) {
+            $purchaseRelation = UserProductRelation::create([
+                'user_id' => $user->id,
+                'product_id' => $product->id,
+                'userproducttype_id' => 4, // 未購入
+            ]);
+        }
+        
+        $address = null;
+        if ($purchaseRelation && $purchaseRelation->address_id && $purchaseRelation->address) {
+            // addressテーブルにレコードがある場合はaddressテーブルの情報を使用
+            $address = $purchaseRelation->address;
+        } else {
+            // addressテーブルにレコードがない場合はusersテーブルの情報を使用
+            $address = (object) [
+                'postcode' => $user->postcode,
+                'address' => $user->address,
+                'building' => $user->building,
+            ];
+        }
+        
+        return view('purchase.purchase', compact('product', 'user', 'address'));
     }
     
     /**
@@ -48,6 +81,24 @@ class PurchaseController extends Controller
         // 購入処理：商品のsoldflgを更新
         $product->update(['soldflg' => true]);
         
+        // UserProductRelationのuserproducttype_idを「未購入」から「Buyer」に更新
+        $user = Auth::user();
+        $purchaseRelation = UserProductRelation::where('user_id', $user->id)
+            ->where('product_id', $id)
+            ->where('userproducttype_id', 4) // 未購入
+            ->first();
+        
+        if ($purchaseRelation) {
+            $purchaseRelation->update(['userproducttype_id' => 2]); // Buyer
+        } else {
+            // レコードがない場合は新規作成
+            UserProductRelation::create([
+                'user_id' => $user->id,
+                'product_id' => $id,
+                'userproducttype_id' => 2, // Buyer
+            ]);
+        }
+        
         return redirect()->route('purchase.complete', $id)
             ->with('success', '購入手続きが完了しました。');
     }
@@ -70,27 +121,73 @@ class PurchaseController extends Controller
         $product = Product::findOrFail($id);
         $user = Auth::user();
         
-        return view('purchase.address_edit', compact('product', 'user'));
+        // 商品に対する購入関係のレコードを確認（Buyer または 未購入）
+        $purchaseRelation = UserProductRelation::where('user_id', $user->id)
+            ->where('product_id', $product->id)
+            ->whereIn('userproducttype_id', [2, 4]) // Buyer または 未購入
+            ->with('address')
+            ->first();
+        
+        $address = null;
+        if ($purchaseRelation && $purchaseRelation->address_id && $purchaseRelation->address) {
+            // addressテーブルにレコードがある場合はaddressテーブルの情報を使用
+            $address = $purchaseRelation->address;
+        } else {
+            // addressテーブルにレコードがない場合はusersテーブルの情報を使用
+            $address = (object) [
+                'postcode' => $user->postcode,
+                'address' => $user->address,
+                'building' => $user->building,
+            ];
+        }
+        
+        return view('purchase.address_edit', compact('product', 'user', 'address'));
     }
     
     /**
      * 住所変更を処理
      */
-    public function updateAddress(Request $request, $id)
+    public function updateAddress(AddressRequest $request, $id)
     {
-        $request->validate([
-            'postcode' => 'required|string|max:10',
-            'address' => 'required|string|max:255',
-            'building' => 'nullable|string|max:255',
-        ]);
-        
-        // ユーザー情報を更新
         $user = Auth::user();
-        $user->update([
-            'postcode' => $request->postcode,
-            'address' => $request->address,
-            'building' => $request->building,
-        ]);
+        
+        // 商品に対する購入関係のレコードを確認（Buyer または 未購入）
+        $purchaseRelation = UserProductRelation::where('user_id', $user->id)
+            ->where('product_id', $id)
+            ->whereIn('userproducttype_id', [2, 4]) // Buyer または 未購入
+            ->with('address')
+            ->first();
+        
+        $address = null;
+        if ($purchaseRelation && $purchaseRelation->address_id && $purchaseRelation->address) {
+            // addressテーブルにレコードがある場合は更新
+            $address = $purchaseRelation->address;
+            $address->update([
+                'postcode' => $request->postcode,
+                'address' => $request->address,
+                'building' => $request->building ?? '',
+            ]);
+        } else {
+            // addressテーブルにレコードがない場合は新規作成
+            $address = Address::create([
+                'postcode' => $request->postcode,
+                'address' => $request->address,
+                'building' => $request->building ?? '',
+            ]);
+            
+            if ($purchaseRelation) {
+                // 既存の購入関係がある場合はaddress_idを更新
+                $purchaseRelation->update(['address_id' => $address->id]);
+            } else {
+                // 購入関係がない場合は新規作成
+                UserProductRelation::create([
+                    'user_id' => $user->id,
+                    'product_id' => $id,
+                    'userproducttype_id' => 2, // Buyer
+                    'address_id' => $address->id,
+                ]);
+            }
+        }
         
         return redirect()->route('purchase.show', $id)
             ->with('success', '住所を更新しました。');

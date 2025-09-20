@@ -37,8 +37,8 @@
             <div class="product-stats">
                 <div class="stats-item">
                     @auth
-                        <button class="mylist-btn" data-product-id="{{ $product->id }}">
-                            <span class="star-icon">☆</span>
+                        <button class="mylist-btn {{ $product->is_in_mylist ? 'in-mylist' : '' }}" data-product-id="{{ $product->id }}">
+                            <span class="star-icon">{{ $product->is_in_mylist ? '★' : '☆' }}</span>
                             <span class="mylist-count">{{ $product->mylistCount ?? 0 }}</span>
                         </button>
                     @else
@@ -58,11 +58,15 @@
             
             <!-- 購入手続きボタン -->
             <div class="productdetail__actions">
-                @auth
-                    <a href="{{ route('purchase.show', $product->id) }}" class="purchase-btn">購入手続きへ</a>
+                @if($product->soldflg)
+                    <button class="purchase-btn purchase-btn--sold" disabled>売り切れ</button>
                 @else
-                    <a href="{{ url('/auth/login') }}" class="purchase-btn">購入手続きへ</a>
-                @endauth
+                    @auth
+                        <a href="{{ route('purchase.show', $product->id) }}" class="purchase-btn">購入手続きへ</a>
+                    @else
+                        <a href="{{ url('/auth/login') }}" class="purchase-btn">購入手続きへ</a>
+                    @endauth
+                @endif
             </div>
             
             <!-- 商品説明タイトル（太文字） -->
@@ -153,8 +157,17 @@ document.addEventListener('DOMContentLoaded', function() {
         mylistBtn.addEventListener('click', function(e) {
             e.preventDefault();
             const productId = this.getAttribute('data-product-id');
+            const isInMylist = this.classList.contains('in-mylist');
             
-            fetch('/productlist/mylist/add', {
+            // 重複送信防止
+            if (this.disabled) {
+                return;
+            }
+            this.disabled = true;
+            
+            const url = isInMylist ? '/productlist/mylist/remove' : '/productlist/mylist/add';
+            
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -179,16 +192,18 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(data => {
                 if (data && data.message) {
-                    // マイリストカウントを更新
-                    const countElement = this.querySelector('.mylist-count');
-                    const currentCount = parseInt(countElement.textContent);
-                    countElement.textContent = currentCount + 1;
+                    // ボタンの状態を切り替え
+                    if (isInMylist) {
+                        // マイリストから削除
+                        this.classList.remove('in-mylist');
+                        this.innerHTML = '<span class="star-icon">☆</span><span class="mylist-count">' + (parseInt(this.querySelector('.mylist-count').textContent) - 1) + '</span>';
+                    } else {
+                        // マイリストに追加
+                        this.classList.add('in-mylist');
+                        this.innerHTML = '<span class="star-icon">★</span><span class="mylist-count">' + (parseInt(this.querySelector('.mylist-count').textContent) + 1) + '</span>';
+                    }
                     
-                    // ボタンの状態を変更
-                    this.classList.add('in-mylist');
-                    this.innerHTML = '<span class="star-icon">★</span><span class="mylist-count">' + (currentCount + 1) + '</span>';
-                    
-                    alert('マイリストに追加しました。');
+                    alert(data.message);
                 } else if (data && data.error) {
                     alert(data.error);
                 }
@@ -196,6 +211,9 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => {
                 console.error('Error:', error);
                 alert('エラーが発生しました。');
+            })
+            .finally(() => {
+                this.disabled = false;
             });
         });
     }
@@ -206,11 +224,23 @@ document.addEventListener('DOMContentLoaded', function() {
         commentForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            
+            // 重複送信防止：ボタンを無効化
+            if (submitBtn.disabled) {
+                return;
+            }
+            submitBtn.disabled = true;
+            submitBtn.textContent = '送信中...';
+            
             const formData = new FormData(this);
             const comment = formData.get('comment').trim();
             
             if (!comment) {
                 alert('コメントを入力してください。');
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
                 return;
             }
             
@@ -251,6 +281,11 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => {
                 console.error('Error:', error);
                 alert('エラーが発生しました。');
+            })
+            .finally(() => {
+                // 送信完了後にボタンを有効化
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
             });
         });
     }

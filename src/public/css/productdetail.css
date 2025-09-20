@@ -482,3 +482,27 @@
         gap: 5px;
     }
 }
+
+/* 売り切れボタンのスタイル */
+.purchase-btn--sold {
+    background-color: #9ca3af !important;
+    color: #ffffff !important;
+    cursor: default !important;
+    opacity: 1 !important;
+    pointer-events: none !important;
+    border: none !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    padding: 12px 24px !important;
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+    transition: none !important;
+}
+
+.purchase-btn--sold:hover {
+    background-color: #9ca3af !important;
+    color: #ffffff !important;
+    transform: none !important;
+    box-shadow: none !important;
+    cursor: default !important;
+}

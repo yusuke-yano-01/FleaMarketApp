@@ -17,20 +17,16 @@ class MyPageController extends Controller
     {
         $user = Auth::user();
         
-        // 出品した商品を取得（Sellerタイプのrelation）
+        // 出品した商品を取得（userproducttype_id = 1のrelation）
         $soldProducts = UserProductRelation::where('user_id', $user->id)
-            ->whereHas('type', function($query) {
-                $query->where('name', 'Seller');
-            })
+            ->where('userproducttype_id', 1) // Seller
             ->with(['product.category', 'product.state'])
             ->get()
             ->pluck('product');
         
-        // 購入した商品を取得（Buyerタイプのrelation）
+        // 購入した商品を取得（userproducttype_id = 2のrelation）
         $boughtProducts = UserProductRelation::where('user_id', $user->id)
-            ->whereHas('type', function($query) {
-                $query->where('name', 'Buyer');
-            })
+            ->where('userproducttype_id', 2) // Buyer
             ->with(['product.category', 'product.state'])
             ->get()
             ->pluck('product');
@@ -54,6 +50,35 @@ class MyPageController extends Controller
     {
         $user = Auth::user();
         return view('mypage.profile_setup', compact('user'));
+    }
+    
+    /**
+     * プロフィール編集を更新
+     */
+    public function updateProfile(ProfileRequest $request)
+    {
+        $user = Auth::user();
+        
+        // 画像アップロード処理
+        $imagePath = $user->image; // デフォルト画像を保持
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->storeAs('public/userimages', $imageName);
+            $imagePath = 'userimages/' . $imageName;
+        }
+        
+        // ユーザー情報のみを更新（usersテーブル）
+        $user->update([
+            'name' => $request->name,
+            'postcode' => $request->postcode,
+            'address' => $request->address,
+            'building' => $request->building,
+            'image' => $imagePath,
+        ]);
+        
+        return redirect()->route('mypage.index')
+            ->with('success', 'プロフィールを更新しました。');
     }
     
     /**

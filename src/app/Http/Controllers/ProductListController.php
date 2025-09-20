@@ -81,6 +81,25 @@ class ProductListController extends Controller
                 $product->setRelation('comments', collect());
             }
             
+            // マイリスト状態とカウントを追加
+            $product->is_in_mylist = false;
+            $product->mylistCount = 0;
+            
+            // マイリストカウントを取得
+            $mylistCount = UserProductRelation::where('product_id', $product->id)
+                ->where('userproducttype_id', 3) // mylist
+                ->count();
+            $product->mylistCount = $mylistCount;
+            
+            if (Auth::check()) {
+                $user = Auth::user();
+                $isInMylist = UserProductRelation::where('user_id', $user->id)
+                    ->where('product_id', $product->id)
+                    ->where('userproducttype_id', 3) // mylist
+                    ->exists();
+                $product->is_in_mylist = $isInMylist;
+            }
+            
             return view('productslist.productdetail', compact('product'));
             
         } catch (\Exception $e) {
@@ -119,18 +138,10 @@ class ProductListController extends Controller
         }
         
         $user = Auth::user();
-        $mylistType = UserProductType::where('name', 'mylist')->first();
         
-        if (!$mylistType) {
-            return new \Illuminate\Pagination\LengthAwarePaginator(
-                collect([]), 0, 12, 1,
-                ['path' => request()->url(), 'pageName' => 'page']
-            );
-        }
-        
-        // ユーザーのマイリスト商品を取得
+        // ユーザーのマイリスト商品を取得（userproducttype_id = 3）
         $productIds = UserProductRelation::where('user_id', $user->id)
-            ->where('userproducttype_id', $mylistType->id)
+            ->where('userproducttype_id', 3) // mylist
             ->pluck('product_id');
         
         // 商品IDが空の場合は空のページネーションを返す
@@ -163,27 +174,21 @@ class ProductListController extends Controller
         $user = Auth::user();
         $productId = $request->product_id;
         
-        $mylistType = UserProductType::where('name', 'mylist')->first();
-        
-        if (!$mylistType) {
-            return response()->json(['error' => 'マイリスト機能が利用できません。'], 500);
-        }
-        
-        // 既にマイリストに追加されているかチェック
+        // 既にマイリストに追加されているかチェック（userproducttype_id = 3）
         $existingRelation = UserProductRelation::where('user_id', $user->id)
             ->where('product_id', $productId)
-            ->where('userproducttype_id', $mylistType->id)
+            ->where('userproducttype_id', 3) // mylist
             ->first();
         
         if ($existingRelation) {
             return response()->json(['message' => '既にマイリストに追加されています。'], 400);
         }
         
-        // マイリストに追加
+        // マイリストに追加（userproducttype_id = 3）
         UserProductRelation::create([
             'user_id' => $user->id,
             'product_id' => $productId,
-            'userproducttype_id' => $mylistType->id,
+            'userproducttype_id' => 3, // mylist
         ]);
         
         return response()->json(['message' => 'マイリストに追加しました。']);
@@ -201,16 +206,10 @@ class ProductListController extends Controller
         $user = Auth::user();
         $productId = $request->product_id;
         
-        $mylistType = UserProductType::where('name', 'mylist')->first();
-        
-        if (!$mylistType) {
-            return response()->json(['error' => 'マイリスト機能が利用できません。'], 500);
-        }
-        
-        // マイリストから削除
+        // マイリストから削除（userproducttype_id = 3）
         $deleted = UserProductRelation::where('user_id', $user->id)
             ->where('product_id', $productId)
-            ->where('userproducttype_id', $mylistType->id)
+            ->where('userproducttype_id', 3) // mylist
             ->delete();
         
         if ($deleted) {

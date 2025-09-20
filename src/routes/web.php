@@ -63,6 +63,7 @@ Route::middleware(['auth', 'profile.setup'])->group(function () {
     // マイページ
     Route::get('mypage', [MyPageController::class, 'index']);
     Route::get('mypage/profile/edit', [MyPageController::class, 'editProfile']);
+    Route::post('mypage/profile/update', [MyPageController::class, 'updateProfile'])->name('mypage.profile.update');
     
     // 商品出品関連のルート
     Route::get('productform', [ProductformController::class, 'create'])->name('productform.create');

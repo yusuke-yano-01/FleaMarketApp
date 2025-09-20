@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductState;
+use App\Models\UserProductRelation;
+use App\Models\UserProductType;
 
 class ProductformController extends Controller
 {
@@ -49,8 +51,14 @@ class ProductformController extends Controller
                 \Log::info('画像アップロード開始');
                 $image = $request->file('image');
                 $imageName = time() . '_' . $image->getClientOriginalName();
-                $image->storeAs('public/productimages', $imageName);
-                $imagePath = 'storage/productimages/' . $imageName;
+                
+                // 既存の商品と同じ形式で保存（productimages/日付/フォルダ/ファイル名）
+                $dateFolder = date('Ymd');
+                $randomFolder = sprintf('%03d', rand(1, 999));
+                $storagePath = "public/productimages/{$dateFolder}/{$randomFolder}";
+                
+                $image->storeAs($storagePath, $imageName);
+                $imagePath = "productimages/{$dateFolder}/{$randomFolder}/{$imageName}";
                 \Log::info('画像アップロード完了: ' . $imagePath);
             }
             
@@ -79,6 +87,14 @@ class ProductformController extends Controller
             
             // 作成された商品の詳細をログに出力
             \Log::info('作成された商品: ' . json_encode($product->toArray()));
+            
+            // UserProductRelationにSellerレコードを作成（userproducttype_id = 1）
+            UserProductRelation::create([
+                'user_id' => $user->id,
+                'product_id' => $product->id,
+                'userproducttype_id' => 1, // Seller
+            ]);
+            \Log::info('Sellerレコード作成完了: user_id=' . $user->id . ', product_id=' . $product->id . ', userproducttype_id=1');
             
             return redirect()->route('productlist.index')
                 ->with('success', '商品を出品しました。');
