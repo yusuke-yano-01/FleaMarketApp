@@ -45,7 +45,7 @@
                 @if(isset($soldProducts) && $soldProducts->count() > 0)
                     @foreach($soldProducts as $product)
                     <div class="product-item">
-                        <a href="{{ route('productdetail.show', $product->id) }}">
+                        <a href="{{ route('productlist.product', $product->id) }}">
                             <img src="{{ $product->image ? asset('storage/productimages/' . $product->image) : asset('images/no-image.png') }}" alt="{{ $product->name }}" class="product-image" onerror="this.src='/images/no-image.png'">
                             <div class="product-info">
                                 <div class="product-name">{{ $product->name }}</div>
@@ -71,7 +71,7 @@
                 @if(isset($boughtProducts) && $boughtProducts->count() > 0)
                     @foreach($boughtProducts as $product)
                     <div class="product-item">
-                        <a href="{{ route('productdetail.show', $product->id) }}">
+                        <a href="{{ route('productlist.product', $product->id) }}">
                             <img src="{{ $product->image ? asset('storage/productimages/' . $product->image) : asset('images/no-image.png') }}" alt="{{ $product->name }}" class="product-image" onerror="this.src='/images/no-image.png'">
                             <div class="product-info">
                                 <div class="product-name">{{ $product->name }}</div>
