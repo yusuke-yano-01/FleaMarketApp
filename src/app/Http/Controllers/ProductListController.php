@@ -257,9 +257,9 @@ class ProductListController extends Controller
     private function addPurchasedFlags($products)
     {
         if (!Auth::check()) {
-            // 未ログインの場合はすべての商品に購入済みフラグをfalseに設定
+            // 未ログインの場合は売却済み商品のみ購入済みフラグをtrueに設定
             foreach ($products as $product) {
-                $product->is_purchased = false;
+                $product->is_purchased = $product->soldflg;
             }
             return;
         }
@@ -268,9 +268,9 @@ class ProductListController extends Controller
         $buyerType = UserProductType::where('name', 'Buyer')->first();
         
         if (!$buyerType) {
-            // Buyerタイプが存在しない場合はすべての商品に購入済みフラグをfalseに設定
+            // Buyerタイプが存在しない場合は売却済み商品のみ購入済みフラグをtrueに設定
             foreach ($products as $product) {
-                $product->is_purchased = false;
+                $product->is_purchased = $product->soldflg;
             }
             return;
         }
@@ -283,7 +283,8 @@ class ProductListController extends Controller
         
         // 各商品に購入済みフラグを設定
         foreach ($products as $product) {
-            $product->is_purchased = in_array($product->id, $purchasedProductIds);
+            // 売却済み商品（soldflg=1）またはユーザーが購入した商品の場合に購入済みフラグを設定
+            $product->is_purchased = $product->soldflg || in_array($product->id, $purchasedProductIds);
         }
     }
 }
