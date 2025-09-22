@@ -6,6 +6,10 @@
 <link rel="stylesheet" href="{{ asset('css/purchase.css') }}">
 @endsection
 
+@section('js')
+<script src="https://js.stripe.com/v3/"></script>
+@endsection
+
 @section('content')
 <div class="purchase__content">
     @if (session('error'))
@@ -123,10 +127,8 @@ function updatePaymentMethod() {
     }
 }
 
-function submitPurchase() {
+async function submitPurchase() {
     const select = document.getElementById('payment_method');
-    const hiddenInput = document.getElementById('payment_method_hidden');
-    const form = document.getElementById('purchase-form');
     const errorDiv = document.getElementById('payment-error');
     
     // エラーメッセージを非表示にする
@@ -140,10 +142,65 @@ function submitPurchase() {
         return false;
     }
     
-    // 隠しフィールドに値を設定
-    hiddenInput.value = select.value;
-    
-    // フォームを送信
+    // 支払い方法に応じて処理を分岐
+    if (select.value === 'card') {
+        await processStripePayment();
+    } else if (select.value === 'convenience_store') {
+        await processConveniencePayment();
+    }
+}
+
+async function processStripePayment() {
+    try {
+        // Stripe Checkoutセッションを作成
+        const response = await fetch(`/purchase/{{ $product->id }}/checkout`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                payment_method: 'card'
+            })
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('HTTP Error:', response.status, errorText);
+            throw new Error(`サーバーエラー (${response.status}): ${errorText}`);
+        }
+
+        const data = await response.json();
+
+        if (data.error) {
+            throw new Error(data.error);
+        }
+
+        if (!data.session_id) {
+            throw new Error('セッションIDが取得できませんでした。');
+        }
+
+        // Stripe Checkoutにリダイレクト
+        const stripe = Stripe('{{ config("services.stripe.key") }}');
+        const result = await stripe.redirectToCheckout({
+            sessionId: data.session_id
+        });
+
+        if (result.error) {
+            throw new Error(result.error.message);
+        }
+    } catch (error) {
+        alert('決済処理でエラーが発生しました: ' + error.message);
+        console.error('Stripe payment error:', error);
+    }
+}
+
+async function processConveniencePayment() {
+    // コンビニ払いの場合は従来のフォーム送信
+    const form = document.getElementById('purchase-form');
+    const hiddenInput = document.getElementById('payment_method_hidden');
+    hiddenInput.value = 'convenience_store';
     form.submit();
 }
 </script>

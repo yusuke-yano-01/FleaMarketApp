@@ -31,7 +31,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('profile.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('mypage.profile.update') }}" enctype="multipart/form-data">
             @csrf
             
             <!-- ユーザーアイコン設定 -->
@@ -58,8 +58,13 @@
 
             <!-- ユーザー名：左揃え -->
             <div class="form-group">
-                <label for="name" class="form-label">ユーザー名</label>
-                <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name) }}" readonly>
+                <label for="name" class="form-label">ユーザー名 <span class="required">*</span></label>
+                <input type="text" class="form-control @error('name') is-invalid @enderror" 
+                       id="name" name="name" value="{{ old('name', $user->name) }}" 
+                       placeholder="例: 田中太郎" required>
+                @error('name')
+                    <div class="error">{{ $message }}</div>
+                @enderror
             </div>
 
             <!-- 郵便番号：左揃え -->
