@@ -6,6 +6,7 @@ use App\Http\Requests\UsersRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
@@ -40,11 +41,14 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-        
-        // 登録後、自動ログインしてプロフィール設定画面へ
+
+        // 登録イベントを発火してメール認証通知を送信
+        event(new Registered($user));
+
+        // 自動ログイン後、メール認証案内画面へ
         Auth::login($user);
-        
-        return redirect()->route('profile.setup');
+
+        return redirect()->route('verification.notice');
     }
 
     public function logout()
