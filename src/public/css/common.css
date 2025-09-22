@@ -180,23 +180,3 @@ html {
         font-size: 14px;
     }
 }
-
-@media (max-width: 480px) {
-    .header__logo-image {
-        height: 30px;
-    }
-
-    .header-nav {
-        gap: 8px;
-    }
-
-    .header-nav__user {
-        gap: 8px;
-    }
-
-    .header-nav__link,
-    .header-nav__logout-btn {
-        padding: 4px 8px;
-        font-size: 12px;
-    }
-}

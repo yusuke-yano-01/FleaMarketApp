@@ -490,36 +490,3 @@
         min-width: 600px;
     }
 }
-
-@media (max-width: 480px) {
-    .productlist__heading h2 {
-        font-size: 24px;
-    }
-
-    .productlist__table-inner {
-        min-width: 500px;
-    }
-
-    .mylist-btn {
-        padding: 4px 8px;
-        font-size: 12px;
-        min-width: 50px;
-    }
-
-    /* 購入済みアイコンのレスポンシブ対応 */
-    .purchased-icon {
-        bottom: 0px;
-        left: 0px;
-        padding: 1px 2px;
-        font-size: 7px;
-        border-radius: 3px;
-    }
-
-    .purchased-icon i {
-        font-size: 7px;
-    }
-
-    .purchased-icon span {
-        font-size: 7px;
-    }
-}
