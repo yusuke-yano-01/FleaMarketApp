@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
     nginx:
         image: nginx:1.21.1
@@ -38,3 +36,17 @@ services:
             - mysql
         ports:
             - 8080:80
+
+    mailhog:
+        image: mailhog/mailhog:latest
+        ports:
+            - "1025:1025" # SMTP port
+            - "8025:8025" # Web UI port
+        environment:
+            - MH_STORAGE=memory
+            - MH_MAILDIR_PATH=/maildir
+        volumes:
+            - mailhog_data:/maildir
+
+volumes:
+    mailhog_data:

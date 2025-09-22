@@ -43,7 +43,7 @@ Route::group(['prefix' => 'auth'], function() {
 });
 
 // プロフィール設定（住所チェックなし）
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('profile/setup', [MyPageController::class, 'showProfileSetup'])->name('profile.setup');
     Route::post('profile/setup', [MyPageController::class, 'storeProfile'])->name('profile.store');
 });
@@ -59,7 +59,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // ログイン後のみアクセス可能なルート（住所チェックあり）
-Route::middleware(['auth', 'profile.setup'])->group(function () {
+Route::middleware(['auth', 'verified', 'profile.setup'])->group(function () {
     // マイページ
     Route::get('mypage', [MyPageController::class, 'index'])->name('mypage.index');
     Route::get('mypage/profile/edit', [MyPageController::class, 'editProfile'])->name('mypage.profile.edit');

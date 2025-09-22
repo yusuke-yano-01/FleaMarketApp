@@ -31,7 +31,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('mypage.profile.update') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('profile.store') }}" enctype="multipart/form-data">
             @csrf
             
             <!-- ユーザーアイコン設定 -->
