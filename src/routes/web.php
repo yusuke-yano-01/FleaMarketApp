@@ -61,8 +61,8 @@ Route::middleware('auth')->group(function () {
 // ログイン後のみアクセス可能なルート（住所チェックあり）
 Route::middleware(['auth', 'profile.setup'])->group(function () {
     // マイページ
-    Route::get('mypage', [MyPageController::class, 'index']);
-    Route::get('mypage/profile/edit', [MyPageController::class, 'editProfile']);
+    Route::get('mypage', [MyPageController::class, 'index'])->name('mypage.index');
+    Route::get('mypage/profile/edit', [MyPageController::class, 'editProfile'])->name('mypage.profile.edit');
     Route::post('mypage/profile/update', [MyPageController::class, 'updateProfile'])->name('mypage.profile.update');
     
     // 商品出品関連のルート

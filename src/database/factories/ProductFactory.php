@@ -14,67 +14,123 @@ class ProductFactory extends Factory
      */
     public function definition()
     {
-        // カテゴリ別の価格帯を定義
-        $categoryPriceRanges = [
-            1 => [1000, 50000],    // Electronics: 1,000円〜50,000円
-            2 => [500, 15000],     // Clothing: 500円〜15,000円
-            3 => [100, 3000],      // Books: 100円〜3,000円
-            4 => [200, 8000],      // Home & Garden: 200円〜8,000円
-            5 => [300, 12000],     // Sports: 300円〜12,000円
+        // 指定された商品データ
+        $products = [
+            [
+                'name' => '腕時計',
+                'value' => 15000,
+                'brand' => 'Rolax',
+                'detail' => 'スタイリッシュなデザインのメンズ腕時計',
+                'image' => 'productimages/sample/006/watch.jpg',
+                'state' => '良好'
+            ],
+            [
+                'name' => 'HDD',
+                'value' => 5000,
+                'brand' => '西芝',
+                'detail' => '高速で信頼性の高いハードディスク',
+                'image' => 'productimages/sample/003/hdd.jpg',
+                'state' => '目立った傷や汚れなし'
+            ],
+            [
+                'name' => '玉ねぎ3束',
+                'value' => 300,
+                'brand' => 'なし',
+                'detail' => '新鮮な玉ねぎ3束のセット',
+                'image' => 'productimages/sample/007/onion.jpg',
+                'state' => 'やや傷や汚れあり'
+            ],
+            [
+                'name' => '革靴',
+                'value' => 4000,
+                'brand' => 'LeatherWorks',
+                'detail' => 'クラシックなデザインの革靴',
+                'image' => 'productimages/sample/002/shoes.jpg',
+                'state' => '状態が悪い'
+            ],
+            [
+                'name' => 'ノートPC',
+                'value' => 45000,
+                'brand' => 'TechPro',
+                'detail' => '高性能なノートパソコン',
+                'image' => 'productimages/sample/001/laptop.jpg',
+                'state' => '良好'
+            ],
+            [
+                'name' => 'マイク',
+                'value' => 8000,
+                'brand' => 'なし',
+                'detail' => '高音質のレコーディング用マイク',
+                'image' => 'productimages/sample/004/mic.jpg',
+                'state' => '目立った傷や汚れなし'
+            ],
+            [
+                'name' => 'ショルダーバッグ',
+                'value' => 3500,
+                'brand' => 'StyleBag',
+                'detail' => 'おしゃれなショルダーバッグ',
+                'image' => 'productimages/sample/008/bag.jpg',
+                'state' => 'やや傷や汚れあり'
+            ],
+            [
+                'name' => 'タンブラー',
+                'value' => 500,
+                'brand' => 'なし',
+                'detail' => '使いやすいタンブラー',
+                'image' => 'productimages/sample/009/tumbler.jpg',
+                'state' => '状態が悪い'
+            ],
+            [
+                'name' => 'コーヒーミル',
+                'value' => 4000,
+                'brand' => 'Starbacks',
+                'detail' => '手動のコーヒーミル',
+                'image' => 'productimages/sample/005/coffee-grinder.jpg',
+                'state' => '良好'
+            ],
+            [
+                'name' => 'メイクセット',
+                'value' => 2500,
+                'brand' => 'BeautyLine',
+                'detail' => '便利なメイクアップセット',
+                'image' => 'productimages/sample/010/makeup.jpg',
+                'state' => '目立った傷や汚れなし'
+            ]
+        ];
+
+        // ランダムに商品を選択
+        $product = $this->faker->randomElement($products);
+        
+        // 状態に応じてproductstate_idを決定
+        $stateMapping = [
+            '良好' => 1,
+            '目立った傷や汚れなし' => 2,
+            'やや傷や汚れあり' => 3,
+            '状態が悪い' => 4
         ];
         
-        // 既存のカテゴリからランダムに選択
-        $category = \App\Models\ProductCategory::inRandomOrder()->first();
-        $categoryId = $category ? $category->id : 1;
-        $minPrice = $categoryPriceRanges[$categoryId] ?? [100, 10000];
-        
-        // 日本語の商品名サンプル
-        $productNames = [
-            '高品質なスマートフォン', 'スタイリッシュなTシャツ', '面白い小説本',
-            '使いやすい工具セット', '快適なソファ', '美味しいお菓子',
-            '高性能なノートパソコン', 'おしゃれなバッグ', '実用的なキッチン用品',
-            '楽しいボードゲーム', '美しいアート作品', '便利な収納用品',
-            '高級な腕時計', '快適な枕', '実用的な傘', 'おしゃれな帽子',
-            '高性能なカメラ', '快適な椅子', '実用的な本棚', 'おしゃれな花瓶',
-            '高品質なヘッドフォン', '快適な布団', '実用的なテーブル', 'おしゃれなランプ',
-            '高性能なプリンター', '快適なクッション', '実用的な収納ボックス', 'おしゃれな絵画',
-            '高品質なスピーカー', '快適なマット', '実用的な棚', 'おしゃれな時計',
-            '高性能なスキャナー', '快適なブランケット', '実用的なゴミ箱', 'おしゃれな花瓶',
-            '高品質なマイク', '快適なタオル', '実用的な洗面台', 'おしゃれな鏡',
-            '高性能なルーター', '快適なカーペット', '実用的なドア', 'おしゃれなカーテン'
-        ];
-        
-        // 日本語の商品詳細サンプル
-        $productDetails = [
-            'この商品は高品質で長持ちします。日常使いに最適です。',
-            'デザインが美しく、機能性も抜群です。多くのお客様に愛用されています。',
-            '使いやすさを重視した設計で、初心者の方でも簡単に使えます。',
-            '耐久性に優れ、長期間の使用に耐える品質です。',
-            'スタイリッシュな見た目で、お部屋のインテリアとしても活躍します。',
-            '安全性を最優先に考えて作られた商品です。',
-            'コストパフォーマンスが良く、お得感のある商品です。',
-            '環境に配慮した素材を使用しています。',
-            'メンテナンスが簡単で、お手入れが楽です。',
-            '多機能で様々な用途に使える便利な商品です。'
+        // 商品名に応じてカテゴリを決定
+        $categoryMapping = [
+            '腕時計' => 9, // ジュエリー・アクセサリー
+            'HDD' => 1, // 家電・PC・スマホ
+            'ノートPC' => 1, // 家電・PC・スマホ
+            'マイク' => 1, // 家電・PC・スマホ
+            '玉ねぎ3束' => 5, // 食品・飲料
+            'コーヒーミル' => 4, // ホビー・スポーツ
+            '革靴' => 2, // ファッション
+            'ショルダーバッグ' => 2, // ファッション
+            'タンブラー' => 5, // 食品・飲料
+            'メイクセット' => 8, // 美容・健康
         ];
         
         return [
-            'productcategory_id' => $categoryId,
-            'productstate_id' => \App\Models\ProductState::inRandomOrder()->first()->id,
-            'name' => $this->faker->unique()->randomElement($productNames),
-            'detail' => $this->faker->randomElement($productDetails),
-            'value' => $this->faker->numberBetween($minPrice[0], $minPrice[1]),
-            'brand' => $this->faker->randomElement([
-                'Apple', 'Samsung', 'Sony', 'Nike', 'Adidas',
-                'Uniqlo', 'Zara', 'H&M', 'IKEA', 'MUJI'
-            ]),
-            'image' => $this->faker->randomElement([
-                'productimages/20250813/001/laptop.jpg',
-                'productimages/20250813/002/shoes.jpg',
-                'productimages/20250813/003/hdd.jpg',
-                'productimages/20250813/004/mic.jpg',
-                'productimages/20250813/005/coffee-grinder.jpg'
-            ]),
+            'productcategory_id' => $categoryMapping[$product['name']] ?? 1,
+            'productstate_id' => $stateMapping[$product['state']] ?? 1,
+            'name' => $product['name'],
+            'detail' => $product['detail'],
+            'value' => $product['value'],
+            'brand' => $product['brand'],
+            'image' => $product['image'],
             'soldflg' => $this->faker->boolean(30), // 30%の確率でtrue（売却済み）
         ];
     }
