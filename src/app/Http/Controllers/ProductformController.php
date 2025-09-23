@@ -20,7 +20,7 @@ class ProductformController extends Controller
         $categories = ProductCategory::all();
         $states = ProductState::all();
         
-        return view('productform.product_detail', compact('categories', 'states'));
+        return view('productform.product_sale', compact('categories', 'states'));
     }
     
     /**
