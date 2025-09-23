@@ -23,7 +23,7 @@
 
         @if ($errors->any())
             <div class="alert alert-danger">
-                <ul style="margin: 0; padding-left: 20px;">
+                <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -47,13 +47,13 @@
                                 }
                             }
                         @endphp
-                        <img src="{{ $imagePath }}" alt="ユーザー画像" class="avatar-image" onerror="this.src='{{ asset('storage/userimages/default_user_icon.png') }}'">
+                        <img src="{{ $imagePath }}" alt="ユーザー画像" class="avatar-image" data-fallback="{{ asset('storage/userimages/default_user_icon.png') }}">
                     </div>
                     <button type="button" class="change-image-btn" onclick="document.getElementById('image').click()">
                         画像を選択する
                     </button>
                 </div>
-                <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(this)" style="display: none;">
+                <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(this)" class="hidden">
             </div>
 
             <!-- ユーザー名：左揃え -->
@@ -117,6 +117,15 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('img[data-fallback]').forEach(function(img) {
+            img.addEventListener('error', function() {
+                if (img.dataset.fallback) {
+                    img.src = img.dataset.fallback;
+                }
+            }, { once: true });
+        });
+    });
     </script>
 </body>
 </html>

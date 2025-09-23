@@ -17,7 +17,7 @@
         <div class="productdetail__image">
             <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/no-image.png') }}" 
                  alt="{{ $product->name }}" 
-                 onerror="this.src='{{ asset('images/no-image.png') }}'">
+                 data-fallback="{{ asset('images/no-image.png') }}">
         </div>
         
         <!-- 右半分：商品詳細 -->
@@ -111,7 +111,7 @@
                         @endforeach
                         
                         @if($product->comments->count() > 3)
-                            <div id="hidden-comments" style="display: none;">
+                            <div id="hidden-comments" class="hidden">
                                 @foreach($product->comments->sortByDesc('created_at')->skip(3) as $comment)
                                     <div class="comment-item">
                                         <div class="comment-header">
@@ -150,6 +150,15 @@
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('img[data-fallback]').forEach(function(img) {
+        img.addEventListener('error', function() {
+            if (img.dataset.fallback) {
+                img.src = img.dataset.fallback;
+            }
+        }, { once: true });
+    });
+});
 document.addEventListener('DOMContentLoaded', function() {
     // マイリストボタン
     const mylistBtn = document.querySelector('.mylist-btn');

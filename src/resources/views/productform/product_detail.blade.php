@@ -23,7 +23,7 @@
 
         @if ($errors->any())
             <div class="alert alert-danger">
-                <ul style="margin: 0; padding-left: 20px;">
+                <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -44,7 +44,7 @@
                         </button>
                     </div>
                 </div>
-                <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(this)" style="display: none;">
+                <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(this)" class="hidden">
             </div>
 
             <!-- 商品の詳細 -->

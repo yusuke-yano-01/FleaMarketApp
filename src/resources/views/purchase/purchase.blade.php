@@ -18,7 +18,7 @@
         </div>
     @endif
     
-    <div id="payment-error" class="alert alert-danger" style="display: none;">
+    <div id="payment-error" class="alert alert-danger hidden">
         お支払い方法を選択してください。
     </div>
     
@@ -34,7 +34,7 @@
                     <div class="product-image">
                         <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/no-image.png') }}" 
                              alt="{{ $product->name }}" 
-                             onerror="this.src='{{ asset('images/no-image.png') }}'">
+                             data-fallback="{{ asset('images/no-image.png') }}">
                     </div>
                     <div class="product-details">
                         <h3 class="product-name">{{ $product->name }}</h3>
@@ -107,6 +107,15 @@
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('img[data-fallback]').forEach(function(img) {
+        img.addEventListener('error', function() {
+            if (img.dataset.fallback) {
+                img.src = img.dataset.fallback;
+            }
+        }, { once: true });
+    });
+});
 function updatePaymentMethod() {
     const select = document.getElementById('payment_method');
     const display = document.getElementById('selected-payment-method');
