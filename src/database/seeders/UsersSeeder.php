@@ -25,7 +25,7 @@ class UsersSeeder extends Seeder
                 'image' => 'default_user_icon.png',
                 'registeredflg' => true,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ],
             [
                 'name' => '佐藤花子',
@@ -38,7 +38,7 @@ class UsersSeeder extends Seeder
                 'image' => 'default_user_icon.png',
                 'registeredflg' => true,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ],
             [
                 'name' => '鈴木一郎',
@@ -51,7 +51,7 @@ class UsersSeeder extends Seeder
                 'image' => 'default_user_icon.png',
                 'registeredflg' => true,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ],
             [
                 'name' => '高橋美咲',
@@ -64,7 +64,7 @@ class UsersSeeder extends Seeder
                 'image' => 'default_user_icon.png',
                 'registeredflg' => true,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ],
             [
                 'name' => '渡辺健太',
@@ -77,8 +77,8 @@ class UsersSeeder extends Seeder
                 'image' => 'default_user_icon.png',
                 'registeredflg' => true,
                 'created_at' => now(),
-                'updated_at' => now()
-            ]
+                'updated_at' => now(),
+            ],
         ];
 
         foreach ($users as $user) {

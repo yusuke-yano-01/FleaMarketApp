@@ -20,7 +20,7 @@ class UserProductRelationsSeeder extends Seeder
                 'userproducttype_id' => 1,   // Seller（売り手）
                 'address_id' => 1,           // 住所ID
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ],
             [
                 'product_id' => 2,           // Leather Shoes
@@ -28,7 +28,7 @@ class UserProductRelationsSeeder extends Seeder
                 'userproducttype_id' => 1,   // Seller（売り手）
                 'address_id' => 2,           // 住所ID
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ],
             [
                 'product_id' => 3,           // HDD Hard Disk
@@ -36,7 +36,7 @@ class UserProductRelationsSeeder extends Seeder
                 'userproducttype_id' => 1,   // Seller（売り手）
                 'address_id' => 3,           // 住所ID
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ],
             [
                 'product_id' => 4,           // Music Mic
@@ -44,7 +44,7 @@ class UserProductRelationsSeeder extends Seeder
                 'userproducttype_id' => 1,   // Seller（売り手）
                 'address_id' => 4,           // 住所ID
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ],
             [
                 'product_id' => 5,           // Coffee Grinder
@@ -52,9 +52,9 @@ class UserProductRelationsSeeder extends Seeder
                 'userproducttype_id' => 1,   // Seller（売り手）
                 'address_id' => 5,           // 住所ID
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ],
-            
+
             // 買い手の関係
             [
                 'product_id' => 1,           // Living Room Laptop
@@ -62,7 +62,7 @@ class UserProductRelationsSeeder extends Seeder
                 'userproducttype_id' => 2,   // Buyer（買い手）
                 'address_id' => 2,           // 住所ID
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ],
             [
                 'product_id' => 2,           // Leather Shoes
@@ -70,7 +70,7 @@ class UserProductRelationsSeeder extends Seeder
                 'userproducttype_id' => 2,   // Buyer（買い手）
                 'address_id' => 3,           // 住所ID
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ],
             [
                 'product_id' => 3,           // HDD Hard Disk
@@ -78,7 +78,7 @@ class UserProductRelationsSeeder extends Seeder
                 'userproducttype_id' => 2,   // Buyer（買い手）
                 'address_id' => 4,           // 住所ID
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ],
             [
                 'product_id' => 4,           // Music Mic
@@ -86,7 +86,7 @@ class UserProductRelationsSeeder extends Seeder
                 'userproducttype_id' => 2,   // Buyer（買い手）
                 'address_id' => 5,           // 住所ID
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ],
             [
                 'product_id' => 5,           // Coffee Grinder
@@ -94,8 +94,8 @@ class UserProductRelationsSeeder extends Seeder
                 'userproducttype_id' => 2,   // Buyer（買い手）
                 'address_id' => 1,           // 住所ID
                 'created_at' => now(),
-                'updated_at' => now()
-            ]
+                'updated_at' => now(),
+            ],
         ];
 
         foreach ($relations as $relation) {

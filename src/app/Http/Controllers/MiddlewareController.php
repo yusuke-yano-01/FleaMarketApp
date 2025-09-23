@@ -14,6 +14,7 @@ class MiddlewareController extends Controller
     public function post(Request $request)
     {
         $content = $request->input('content', '');
-        return view('middleware.middleware', ['content' => $content . ' が送信されました']);
+
+        return view('middleware.middleware', ['content' => $content.' が送信されました']);
     }
-} 
+}

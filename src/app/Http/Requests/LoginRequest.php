@@ -28,7 +28,8 @@ class LoginRequest extends FormRequest
             'password' => ['required'],
         ];
     }
-        /**
+
+    /**
      * Login用のエラーメッセージ
      *
      * @return array

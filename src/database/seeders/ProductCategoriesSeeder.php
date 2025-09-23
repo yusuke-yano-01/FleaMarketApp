@@ -22,25 +22,25 @@ class ProductCategoriesSeeder extends Seeder
             ['id' => 7, 'name' => 'おもちゃ・ゲーム'],
             ['id' => 8, 'name' => '美容・健康'],
             ['id' => 9, 'name' => 'ジュエリー・アクセサリー'],
-            ['id' => 10, 'name' => 'その他']
+            ['id' => 10, 'name' => 'その他'],
         ];
 
         foreach ($categories as $category) {
             // 既存のレコードがあるかチェック
             $exists = DB::table('product_categories')->where('id', $category['id'])->exists();
-            
-            if (!$exists) {
+
+            if (! $exists) {
                 DB::table('product_categories')->insert([
                     'id' => $category['id'],
                     'name' => $category['name'],
                     'created_at' => now(),
-                    'updated_at' => now()
+                    'updated_at' => now(),
                 ]);
             } else {
                 // 既存のレコードを更新
                 DB::table('product_categories')->where('id', $category['id'])->update([
                     'name' => $category['name'],
-                    'updated_at' => now()
+                    'updated_at' => now(),
                 ]);
             }
         }

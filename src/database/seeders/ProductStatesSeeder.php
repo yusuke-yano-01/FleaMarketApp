@@ -17,14 +17,14 @@ class ProductStatesSeeder extends Seeder
             ['name' => '良い'],
             ['name' => '普通'],
             ['name' => '悪い'],
-            ['name' => '非常に悪い']
+            ['name' => '非常に悪い'],
         ];
 
         foreach ($states as $state) {
             DB::table('product_states')->insert([
                 'name' => $state['name'],
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
         }
     }

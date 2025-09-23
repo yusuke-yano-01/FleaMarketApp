@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UsersRequest;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -21,6 +21,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+
             return redirect('/productlist');
         }
 
@@ -54,6 +55,7 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
+
         return redirect('/auth/login');
     }
 }

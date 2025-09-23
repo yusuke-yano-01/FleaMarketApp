@@ -1,13 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ProductListController;
 use App\Http\Controllers\MyPageController;
-use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ProductformController;
-use Laravel\Fortify\Fortify;
-
+use App\Http\Controllers\ProductListController;
+use App\Http\Controllers\PurchaseController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +24,7 @@ Route::get('/', function () {
 });
 
 // 商品一覧関連のルート
-Route::group(['prefix' => 'productlist'], function() {
+Route::group(['prefix' => 'productlist'], function () {
     Route::get('', [ProductListController::class, 'index'])->name('productlist.index');
     Route::get('search', [ProductListController::class, 'search']);
     Route::post('search', [ProductListController::class, 'search']);
@@ -34,11 +32,11 @@ Route::group(['prefix' => 'productlist'], function() {
 });
 
 // 認証関連のルート
-Route::group(['prefix' => 'auth'], function() {
+Route::group(['prefix' => 'auth'], function () {
     Route::get('login', [AuthController::class, 'index']);
     Route::post('login', [AuthController::class, 'login']);
     Route::get('register', [AuthController::class, 'registerForm']);
-    Route::post('register', [AuthController::class,'register']);
+    Route::post('register', [AuthController::class, 'register']);
     Route::post('logout', [AuthController::class, 'logout']);
 });
 
@@ -52,7 +50,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware('auth')->group(function () {
     // コメント投稿
     Route::post('productlist/product/{id}/comment', [ProductListController::class, 'addComment'])->name('product.comment');
-    
+
     // マイリスト機能
     Route::post('productlist/mylist/add', [ProductListController::class, 'addToMylist']);
     Route::post('productlist/mylist/remove', [ProductListController::class, 'removeFromMylist']);
@@ -64,11 +62,11 @@ Route::middleware(['auth', 'verified', 'profile.setup'])->group(function () {
     Route::get('mypage', [MyPageController::class, 'index'])->name('mypage.index');
     Route::get('mypage/profile/edit', [MyPageController::class, 'editProfile'])->name('mypage.profile.edit');
     Route::post('mypage/profile/update', [MyPageController::class, 'updateProfile'])->name('mypage.profile.update');
-    
+
     // 商品出品関連のルート
     Route::get('productform', [ProductformController::class, 'create'])->name('productform.create');
     Route::post('productform', [ProductformController::class, 'store'])->name('productform.store');
-    
+
     // 購入関連のルート
     Route::get('purchase/{id}', [PurchaseController::class, 'show'])->name('purchase.show');
     Route::post('purchase/{id}', [PurchaseController::class, 'purchase'])->name('purchase.process');
@@ -76,4 +74,3 @@ Route::middleware(['auth', 'verified', 'profile.setup'])->group(function () {
     Route::get('purchase/{id}/address/edit', [PurchaseController::class, 'editAddress'])->name('purchase.address.edit');
     Route::post('purchase/{id}/address/update', [PurchaseController::class, 'updateAddress'])->name('purchase.address.update');
 });
-

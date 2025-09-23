@@ -29,11 +29,11 @@ class UsersRequest extends FormRequest
         } elseif ($this->is('auth/login')) {
             return $this->loginRules();
         }
-        
+
         // デフォルトはregister用のルール
         return $this->registerRules();
     }
-    
+
     /**
      * Register用のバリデーションルール
      *
@@ -47,7 +47,7 @@ class UsersRequest extends FormRequest
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
     }
-    
+
     /**
      * Login用のバリデーションルール
      *
@@ -60,7 +60,7 @@ class UsersRequest extends FormRequest
             'password' => ['required', 'string'],
         ];
     }
-        
+
     public function messages()
     {
         // リクエストパスに基づいてメッセージを分ける
@@ -69,11 +69,11 @@ class UsersRequest extends FormRequest
         } elseif ($this->is('auth/login')) {
             return $this->loginMessages();
         }
-        
+
         // デフォルトはregister用のメッセージ
         return $this->registerMessages();
     }
-    
+
     /**
      * Register用のエラーメッセージ
      *
@@ -94,7 +94,7 @@ class UsersRequest extends FormRequest
             'password.confirmed' => 'パスワードが一致しません',
         ];
     }
-    
+
     /**
      * Login用のエラーメッセージ
      *

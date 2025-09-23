@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\DB;
 
 class ProductFactory extends Factory
 {
@@ -22,7 +21,7 @@ class ProductFactory extends Factory
                 'brand' => 'Rolax',
                 'detail' => 'スタイリッシュなデザインのメンズ腕時計',
                 'image' => 'productimages/sample/006/watch.jpg',
-                'state' => '良好'
+                'state' => '良好',
             ],
             [
                 'name' => 'HDD',
@@ -30,7 +29,7 @@ class ProductFactory extends Factory
                 'brand' => '西芝',
                 'detail' => '高速で信頼性の高いハードディスク',
                 'image' => 'productimages/sample/003/hdd.jpg',
-                'state' => '目立った傷や汚れなし'
+                'state' => '目立った傷や汚れなし',
             ],
             [
                 'name' => '玉ねぎ3束',
@@ -38,7 +37,7 @@ class ProductFactory extends Factory
                 'brand' => 'なし',
                 'detail' => '新鮮な玉ねぎ3束のセット',
                 'image' => 'productimages/sample/007/onion.jpg',
-                'state' => 'やや傷や汚れあり'
+                'state' => 'やや傷や汚れあり',
             ],
             [
                 'name' => '革靴',
@@ -46,7 +45,7 @@ class ProductFactory extends Factory
                 'brand' => 'LeatherWorks',
                 'detail' => 'クラシックなデザインの革靴',
                 'image' => 'productimages/sample/002/shoes.jpg',
-                'state' => '状態が悪い'
+                'state' => '状態が悪い',
             ],
             [
                 'name' => 'ノートPC',
@@ -54,7 +53,7 @@ class ProductFactory extends Factory
                 'brand' => 'TechPro',
                 'detail' => '高性能なノートパソコン',
                 'image' => 'productimages/sample/001/laptop.jpg',
-                'state' => '良好'
+                'state' => '良好',
             ],
             [
                 'name' => 'マイク',
@@ -62,7 +61,7 @@ class ProductFactory extends Factory
                 'brand' => 'なし',
                 'detail' => '高音質のレコーディング用マイク',
                 'image' => 'productimages/sample/004/mic.jpg',
-                'state' => '目立った傷や汚れなし'
+                'state' => '目立った傷や汚れなし',
             ],
             [
                 'name' => 'ショルダーバッグ',
@@ -70,7 +69,7 @@ class ProductFactory extends Factory
                 'brand' => 'StyleBag',
                 'detail' => 'おしゃれなショルダーバッグ',
                 'image' => 'productimages/sample/008/bag.jpg',
-                'state' => 'やや傷や汚れあり'
+                'state' => 'やや傷や汚れあり',
             ],
             [
                 'name' => 'タンブラー',
@@ -78,7 +77,7 @@ class ProductFactory extends Factory
                 'brand' => 'なし',
                 'detail' => '使いやすいタンブラー',
                 'image' => 'productimages/sample/009/tumbler.jpg',
-                'state' => '状態が悪い'
+                'state' => '状態が悪い',
             ],
             [
                 'name' => 'コーヒーミル',
@@ -86,7 +85,7 @@ class ProductFactory extends Factory
                 'brand' => 'Starbacks',
                 'detail' => '手動のコーヒーミル',
                 'image' => 'productimages/sample/005/coffee-grinder.jpg',
-                'state' => '良好'
+                'state' => '良好',
             ],
             [
                 'name' => 'メイクセット',
@@ -94,21 +93,21 @@ class ProductFactory extends Factory
                 'brand' => 'BeautyLine',
                 'detail' => '便利なメイクアップセット',
                 'image' => 'productimages/sample/010/makeup.jpg',
-                'state' => '目立った傷や汚れなし'
-            ]
+                'state' => '目立った傷や汚れなし',
+            ],
         ];
 
         // ランダムに商品を選択
         $product = $this->faker->randomElement($products);
-        
+
         // 状態に応じてproductstate_idを決定
         $stateMapping = [
             '良好' => 1,
             '目立った傷や汚れなし' => 2,
             'やや傷や汚れあり' => 3,
-            '状態が悪い' => 4
+            '状態が悪い' => 4,
         ];
-        
+
         // 商品名に応じてカテゴリを決定
         $categoryMapping = [
             '腕時計' => 9, // ジュエリー・アクセサリー
@@ -122,7 +121,7 @@ class ProductFactory extends Factory
             'タンブラー' => 5, // 食品・飲料
             'メイクセット' => 8, // 美容・健康
         ];
-        
+
         return [
             'productcategory_id' => $categoryMapping[$product['name']] ?? 1,
             'productstate_id' => $stateMapping[$product['state']] ?? 1,

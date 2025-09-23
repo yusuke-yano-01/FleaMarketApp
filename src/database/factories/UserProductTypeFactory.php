@@ -15,9 +15,9 @@ class UserProductTypeFactory extends Factory
     {
         $types = [
             '購入商品',
-            '販売商品'
+            '販売商品',
         ];
-        
+
         return [
             'name' => $this->faker->unique()->randomElement($types),
         ];
