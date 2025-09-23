@@ -29,8 +29,6 @@ class ProductformController extends Controller
     public function store(Request $request)
     {
         try {
-            
-            
             $request->validate([
                 'name' => 'required|string|max:255',
                 'brand' => 'required|string|max:255',
@@ -59,7 +57,6 @@ class ProductformController extends Controller
             }
             
             // 商品を作成
-            
             $product = Product::create([
                 'name' => $request->name,
                 'brand' => $request->brand,
@@ -79,9 +76,7 @@ class ProductformController extends Controller
             
             return redirect()->route('productlist.index')
                 ->with('success', '商品を出品しました。');
-                
         } catch (\Exception $e) {
-            
             return back()
                 ->withInput()
                 ->withErrors(['error' => '商品の作成中にエラーが発生しました: ' . $e->getMessage()]);

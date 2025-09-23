@@ -100,7 +100,6 @@ class ProductListController extends Controller
             }
             
             return view('productslist.productdetail', compact('product'));
-            
         } catch (\Exception $e) {
             abort(404, '商品が見つかりません。');
         }
@@ -239,7 +238,6 @@ class ProductListController extends Controller
         ]);
 
         $comment->load('user');
-
         return response()->json([
             'success' => true,
             'comment' => $comment,

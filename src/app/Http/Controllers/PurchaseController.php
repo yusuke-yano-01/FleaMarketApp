@@ -56,7 +56,6 @@ class PurchaseController extends Controller
      */
     public function purchase(Request $request, $id)
     {
-        
         $request->validate([
             'payment_method' => 'required|string|in:convenience_store,card',
             'shipping_postal' => 'required|string|max:10',
