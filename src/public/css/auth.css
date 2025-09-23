@@ -198,8 +198,8 @@
     background: #c0392b;
 }
 
-/* タブレット対応 */
-@media (max-width: 1024px) {
+/* タブレット/ラップトップ対応 */
+@media (max-width: 1400px) {
     .verify-button {
         font-size: 15px;
         padding: 12px 20px;
