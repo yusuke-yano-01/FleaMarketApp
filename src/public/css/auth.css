@@ -160,3 +160,58 @@
     line-height: 1.4;
     margin-bottom: 5px;
 }
+
+/* ========================================
+   認証メール再送（verify email）
+   ======================================== */
+
+.verify-message {
+    margin: 10px auto 20px;
+    text-align: center;
+    color: #333;
+    line-height: 1.6;
+}
+
+.verify-resend-form {
+    text-align: center;
+}
+
+.verify-button {
+    display: inline-block;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    background: #e74c3c;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1.4;
+    max-width: 100%;
+    width: auto;
+    white-space: normal; /* 日本語がはみ出さないように折り返し許可 */
+    word-break: keep-all;
+    box-sizing: border-box;
+}
+
+.verify-button:hover {
+    background: #c0392b;
+}
+
+/* タブレット対応 */
+@media (max-width: 1024px) {
+    .verify-button {
+        font-size: 15px;
+        padding: 12px 20px;
+    }
+}
+
+/* スマホ対応 */
+@media (max-width: 768px) {
+    .verify-button {
+        display: block;
+        width: 100%;
+        font-size: 14px;
+        padding: 10px 16px;
+    }
+}
