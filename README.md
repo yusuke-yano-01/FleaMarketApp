@@ -44,14 +44,14 @@ cd FleaMarketApp
 
 ```bash
 # コンテナのビルドと起動
-docker-compose up -d --build
+docker compose up -d --build
 ```
 
 ### 3. 依存関係のインストール
 
 ```bash
 # PHPコンテナに入る
-docker-compose exec php bash
+docker compose exec php bash
 
 # Composerで依存関係をインストール
 composer install
@@ -270,12 +270,11 @@ erDiagram
     - product_id と user_id を直接参照するように変更
 
 3. **テーブル名の統一**
+
     - スネークケース（snake_case）に統一
     - Laravel の命名規則に準拠
 
 ## URL
-
-### 開発環境
 
 -   **メインサイト**: http://localhost/
 -   **商品一覧**: http://localhost/productlist
@@ -284,77 +283,43 @@ erDiagram
 -   **購入手続き**: http://localhost/purchase/{id}
 -   **認証ページ**: http://localhost/auth/login
 -   **PHPMyAdmin**: http://localhost:8080
+-   **MailHog**: http://localhost:8025
 
-### データベース接続情報
+## メール設定
 
--   **ホスト**: localhost
--   **ポート**: 3306
--   **データベース名**: laravel_db
--   **ユーザー名**: laravel_user
--   **パスワード**: laravel_pass
-
-## 主な機能
-
-### 商品管理
-
--   商品一覧表示（おすすめ商品、マイリスト）
--   商品検索機能（商品名での検索）
--   商品詳細表示（画像、価格、説明、状態等）
--   商品の売却状況管理（soldflg）
-
-### ユーザー機能
-
--   ユーザー登録・ログイン・ログアウト
--   マイページ（プロフィール管理）
--   住所情報の管理
--   プロフィール画像の設定
-
-### 購入機能
-
--   購入手続き（支払い方法選択、配送先確認）
--   住所変更機能
--   購入完了画面
--   支払い方法のバリデーション
-
-### マイリスト機能
-
--   商品をお気に入りに追加・削除
--   マイリスト一覧表示
-
-### コメント機能
-
--   商品へのコメント投稿
--   コメント一覧表示（3 件まで表示、それ以降は「さらに表示」）
--   リアルタイムコメント追加
--   ログインユーザーのみコメント可能
-
-### 認証機能
-
--   ユーザー登録
--   ログイン・ログアウト
--   パスワードリセット
-
-## ディレクトリ構造
-
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=mailhog
+MAIL_PORT=1025
+MAIL_ENCRYPTION=null
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_FROM_ADDRESS=noreply@example.com
+MAIL_FROM_NAME=FleaMarketApp
+APP_URL=http://localhost
 ```
-FleaMarketApp/
-├── docker/                 # Docker設定ファイル
-│   ├── mysql/             # MySQL設定
-│   ├── nginx/             # Nginx設定
-│   └── php/               # PHP設定
-├── src/                   # Laravelアプリケーション
-│   ├── app/               # アプリケーションロジック
-│   │   ├── Http/Controllers/  # コントローラー
-│   │   └── Models/            # モデル
-│   ├── database/          # データベース関連
-│   │   ├── migrations/    # マイグレーション
-│   │   └── seeders/       # シーダー
-│   ├── public/            # 公開ファイル
-│   │   ├── css/           # CSSファイル
-│   │   └── images/        # 画像ファイル
-│   ├── resources/         # ビュー・アセット
-│   │   └── views/         # Bladeテンプレート
-│   └── routes/            # ルート定義
-├── docker-compose.yml     # Docker Compose設定
-└── README.md             # このファイル
+
+### 認証手順（メール確認）
+
+1. ユーザー登録
+2. /email/verify に遷移
+3. MailHog で届いた「Verify Email」メールのリンクを開く
+4. 認証完了
+
+## よく使うコマンド
+
+```bash
+# 起動/停止/再起動
+docker compose up -d
+docker compose down
+docker compose restart
+
+# 状態/ログ
+docker compose ps
+docker compose logs -f nginx
+docker compose logs -f php
+
+# アプリ最適化
+docker compose exec php php artisan optimize:clear
+docker compose exec php php artisan optimize
 ```
