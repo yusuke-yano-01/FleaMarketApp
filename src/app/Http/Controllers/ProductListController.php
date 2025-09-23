@@ -77,7 +77,6 @@ class ProductListController extends Controller
             try {
                 $product->load(['comments.user']);
             } catch (\Exception $e) {
-                \Log::error('コメント取得エラー: ' . $e->getMessage());
                 $product->setRelation('comments', collect());
             }
             
@@ -103,7 +102,6 @@ class ProductListController extends Controller
             return view('productslist.productdetail', compact('product'));
             
         } catch (\Exception $e) {
-            \Log::error('商品詳細ページエラー: ' . $e->getMessage());
             abort(404, '商品が見つかりません。');
         }
     }

@@ -56,8 +56,6 @@ class PurchaseController extends Controller
      */
     public function purchase(Request $request, $id)
     {
-        // デバッグ用：リクエストデータをログに出力
-        \Log::info('Purchase request data:', $request->all());
         
         $request->validate([
             'payment_method' => 'required|string|in:convenience_store,card',

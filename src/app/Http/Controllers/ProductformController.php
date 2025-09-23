@@ -29,7 +29,7 @@ class ProductformController extends Controller
     public function store(Request $request)
     {
         try {
-            \Log::info('商品作成処理開始');
+            
             
             $request->validate([
                 'name' => 'required|string|max:255',
@@ -40,15 +40,12 @@ class ProductformController extends Controller
                 'state_id' => 'required|exists:product_states,id',
                 'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
-            \Log::info('バリデーション成功');
             
             $user = Auth::user();
-            \Log::info('ユーザーID: ' . $user->id);
             
             // 画像アップロード処理
             $imagePath = null;
             if ($request->hasFile('image')) {
-                \Log::info('画像アップロード開始');
                 $image = $request->file('image');
                 $imageName = time() . '_' . $image->getClientOriginalName();
                 
@@ -59,20 +56,9 @@ class ProductformController extends Controller
                 
                 $image->storeAs($storagePath, $imageName);
                 $imagePath = "productimages/{$dateFolder}/{$randomFolder}/{$imageName}";
-                \Log::info('画像アップロード完了: ' . $imagePath);
             }
             
             // 商品を作成
-            \Log::info('商品作成開始');
-            \Log::info('リクエストデータ: ' . json_encode([
-                'name' => $request->name,
-                'brand' => $request->brand,
-                'description' => $request->description,
-                'price' => $request->price,
-                'category_id' => $request->category_id,
-                'state_id' => $request->state_id,
-                'image_path' => $imagePath
-            ]));
             
             $product = Product::create([
                 'name' => $request->name,
@@ -83,10 +69,6 @@ class ProductformController extends Controller
                 'productstate_id' => $request->state_id,
                 'image' => $imagePath,
             ]);
-            \Log::info('商品作成完了。ID: ' . $product->id);
-            
-            // 作成された商品の詳細をログに出力
-            \Log::info('作成された商品: ' . json_encode($product->toArray()));
             
             // UserProductRelationにSellerレコードを作成（userproducttype_id = 1）
             UserProductRelation::create([
@@ -94,14 +76,11 @@ class ProductformController extends Controller
                 'product_id' => $product->id,
                 'userproducttype_id' => 1, // Seller
             ]);
-            \Log::info('Sellerレコード作成完了: user_id=' . $user->id . ', product_id=' . $product->id . ', userproducttype_id=1');
             
             return redirect()->route('productlist.index')
                 ->with('success', '商品を出品しました。');
                 
         } catch (\Exception $e) {
-            \Log::error('商品作成エラー: ' . $e->getMessage());
-            \Log::error('スタックトレース: ' . $e->getTraceAsString());
             
             return back()
                 ->withInput()
